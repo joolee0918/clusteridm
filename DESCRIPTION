@@ -1,0 +1,18 @@
+Package: clusteridm
+Type: Package
+Title: Clustered illness-death model
+Version: 0.1.0
+Author: Jooyoung Lee and Richard J. Cook
+Maintainer: Jooyoung Lee <joolee0918@gmail.com>
+URL: https://github.com/joolee0918/clustermsm
+BugReports: https://github.com/joolee0918/clustermsm/issues
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp, survival, timereg, copula, msm, numDeriv, combinat
+RoxygenNote: 6.1.1
