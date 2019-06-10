@@ -65,7 +65,7 @@ if(design == 1){
 
     score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
                                                        Age = Age, Cal = Cal, lam03 = lam03,
-                                                      fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn, ppch = eha::ppch))
+                                                      fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
 
     }
   }else{
@@ -73,7 +73,7 @@ if(design == 1){
 
     score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD2,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
                                                        Age = Age, Cal = Cal, lam03 = lam03,
-                                                       fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
+                                                       fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn, ppch = eha::ppch))
 
 
   }else {
