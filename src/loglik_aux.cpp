@@ -76,3 +76,33 @@ double loglikS(DataFrame outdata_S, NumericVector par, List LAM03S, List cutS, F
 
 }
 
+
+//[[Rcpp::export()]]
+double NloglikS(DataFrame outdata_S, NumericVector par, List LAM03S, List cutS, Function fgau, Function fdpexp, Function fppexp){
+
+  int i;
+  double lam01 = exp(par[0]);
+
+  double auxtmp2 = 0;
+
+
+  for(i=0; i<LAM03S.size(); i++) {
+    double C0 = as<NumericVector>(outdata_S["C"])[i];
+    int del2 = as<NumericVector>(outdata_S["del2"])[i];
+
+
+    NumericMatrix gauss_quad = fgau(20, 0, C0);
+    NumericVector u = gauss_quad(_,0);
+    NumericVector w = gauss_quad(_,1);
+
+    auxtmp2 += ((1-del2)*log(exp(-lam01*C0))
+                  + del2*log(sum(w*dexp(u, lam01)))
+                  - log(exp(-lam01*C0)+ sum(w*dexp(u, lam01))));
+
+  }
+
+  return(auxtmp2);
+
+}
+
+

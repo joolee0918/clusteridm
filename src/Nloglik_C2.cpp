@@ -16,16 +16,16 @@ using namespace Rcpp;
 
 //[[Rcpp::export()]]
 double NloglikFD2(NumericVector par, List outdata_F, NumericVector outdata_proband,
+                  NumericVector Age, NumericVector Cal,  DataFrame lam03,
                   Function fgau, Function fdpexp, Function fppexp, Function combn, Function ppch){
 
   double lam01 = exp(par[0]);
-  double theta = exp(par[1]);
-  double rho = exp(par[2]);
+  double rho = exp(par[1]);
   double newrho = rho/(1+rho);
   double rr=0;
 
 
-  int i, j, j1, j2, k, l, nr, pair_nr;
+  int i, j, j1, j2, k, nr, pair_nr;
   int nf = outdata_F.size();
   NumericVector tmp(2);
   double C0;
