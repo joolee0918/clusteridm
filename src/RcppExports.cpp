@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // NloglikFD1
-double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband, NumericVector Age, NumericVector Cal, DataFrame lam03, Function fgau, Function fdpexp, Function fppexp, Function combn);
-RcppExport SEXP _clusteridm_NloglikFD1(SEXP parSEXP, SEXP outdata_FSEXP, SEXP outdata_probandSEXP, SEXP AgeSEXP, SEXP CalSEXP, SEXP lam03SEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP, SEXP combnSEXP) {
+double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband, NumericVector Age, NumericVector Cal, DataFrame lam03, bool full, Function fgau, Function fdpexp, Function fppexp, Function combn);
+RcppExport SEXP _clusteridm_NloglikFD1(SEXP parSEXP, SEXP outdata_FSEXP, SEXP outdata_probandSEXP, SEXP AgeSEXP, SEXP CalSEXP, SEXP lam03SEXP, SEXP fullSEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP, SEXP combnSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,11 +17,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type Age(AgeSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type Cal(CalSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type lam03(lam03SEXP);
+    Rcpp::traits::input_parameter< bool >::type full(fullSEXP);
     Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
     Rcpp::traits::input_parameter< Function >::type fdpexp(fdpexpSEXP);
     Rcpp::traits::input_parameter< Function >::type fppexp(fppexpSEXP);
     Rcpp::traits::input_parameter< Function >::type combn(combnSEXP);
-    rcpp_result_gen = Rcpp::wrap(NloglikFD1(par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, fdpexp, fppexp, combn));
+    rcpp_result_gen = Rcpp::wrap(NloglikFD1(par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -47,8 +48,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // loglikFD1
-double loglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband, NumericVector Age, NumericVector Cal, DataFrame lam03, Function fgau, Function fdpexp, Function fppexp, Function combn);
-RcppExport SEXP _clusteridm_loglikFD1(SEXP parSEXP, SEXP outdata_FSEXP, SEXP outdata_probandSEXP, SEXP AgeSEXP, SEXP CalSEXP, SEXP lam03SEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP, SEXP combnSEXP) {
+double loglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband, NumericVector Age, NumericVector Cal, DataFrame lam03, bool full, Function fgau, Function fdpexp, Function fppexp, Function combn);
+RcppExport SEXP _clusteridm_loglikFD1(SEXP parSEXP, SEXP outdata_FSEXP, SEXP outdata_probandSEXP, SEXP AgeSEXP, SEXP CalSEXP, SEXP lam03SEXP, SEXP fullSEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP, SEXP combnSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -58,11 +59,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type Age(AgeSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type Cal(CalSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type lam03(lam03SEXP);
+    Rcpp::traits::input_parameter< bool >::type full(fullSEXP);
     Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
     Rcpp::traits::input_parameter< Function >::type fdpexp(fdpexpSEXP);
     Rcpp::traits::input_parameter< Function >::type fppexp(fppexpSEXP);
     Rcpp::traits::input_parameter< Function >::type combn(combnSEXP);
-    rcpp_result_gen = Rcpp::wrap(loglikFD1(par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, fdpexp, fppexp, combn));
+    rcpp_result_gen = Rcpp::wrap(loglikFD1(par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -140,9 +142,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_clusteridm_NloglikFD1", (DL_FUNC) &_clusteridm_NloglikFD1, 10},
+    {"_clusteridm_NloglikFD1", (DL_FUNC) &_clusteridm_NloglikFD1, 11},
     {"_clusteridm_NloglikFD2", (DL_FUNC) &_clusteridm_NloglikFD2, 11},
-    {"_clusteridm_loglikFD1", (DL_FUNC) &_clusteridm_loglikFD1, 10},
+    {"_clusteridm_loglikFD1", (DL_FUNC) &_clusteridm_loglikFD1, 11},
     {"_clusteridm_loglikFD2", (DL_FUNC) &_clusteridm_loglikFD2, 11},
     {"_clusteridm_loglikR", (DL_FUNC) &_clusteridm_loglikR, 7},
     {"_clusteridm_loglikS", (DL_FUNC) &_clusteridm_loglikS, 7},
