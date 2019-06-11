@@ -135,7 +135,7 @@ generate_con <- function(id, mi, lam01, lam12, lam03, ktau, proband, sen, u0) {
   for(i in 1:(mi-1)){
 
     if(multdel2[i]==1) {
-      tmpy = timereg::pc.hazard(cbind(breaks=c(Af[[i]], 2010.5-B[i]) , rate=c(0, u[i]*LAM12[[i]])), rr=1,  entry=multX[i], cum.hazard=F)
+      tmpy = timereg::pc.hazard(cbind(breaks=c(Af[[i]], 2010.5-B[i]) , rate=c(0, LAM12[[i]])), rr=1,  entry=multX[i], cum.hazard=F)
       multY[i] = tmpy$time
       multdel3[i] = tmpy$status
     } else {
@@ -196,7 +196,7 @@ generate_mar <- function(id, B0, R0, lam01, lam12, lam03, sen){
   multdel2 <- ifelse(multT < multD$time, 1,0)
 
   if(multdel2==1){
-    tmp <-  timereg::pc.hazard(cbind(breaks=c(Af.F, F0-B0) , rate=c(0, u*LAM12)), rr=1,  entry=multX, cum.hazard=F)
+    tmp <-  timereg::pc.hazard(cbind(breaks=c(Af.F, F0-B0) , rate=c(0, LAM12)), rr=1,  entry=multX, cum.hazard=F)
     multY <- tmp$time
     multdel3 <- tmp$status
     multdel1 <- 0
@@ -241,7 +241,7 @@ generate_cur <- function(id, B0, lam01, lam12, lam03, sen){
   multdel2 <- ifelse(multT < multD$time, 1,0)
 
   if(multdel2==1){
-    tmp <-  timereg::pc.hazard(cbind(breaks=c(Af.R, 2000.5-B0) , rate=c(0, u*LAM12)), rr=1,  entry=multX, cum.hazard=F)
+    tmp <-  timereg::pc.hazard(cbind(breaks=c(Af.R, 2000.5-B0) , rate=c(0, LAM12)), rr=1,  entry=multX, cum.hazard=F)
     multY <- tmp$time
     multdel3 <- tmp$status
   }
