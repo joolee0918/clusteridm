@@ -125,7 +125,7 @@ NumericVector dpexp(NumericVector q, NumericVector rate, NumericVector t, bool l
 
 //[[Rcpp::export()]]
 double loglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband,
-                NumericVector Age, NumericVector Cal,  DataFrame lam03,
+                NumericVector Age, NumericVector Cal,  DataFrame lam03, bool full,
                 Function fgau, Function fdpexp, Function fppexp, Function combn){
 
   double lam01 = exp(par[0]);
@@ -181,10 +181,6 @@ for(i=0; i<nf; i++){
   IntegerVector idx(nr-1);
   idx = seq(1, nr-1);
 
-  NumericMatrix Sf(nr-1, 2);
-  NumericVector Sc(nr-1);
-  NumericMatrix S(pair_nr, 2);
-  IntegerMatrix fam_del2(pair_nr, 2);
   C0 = pC0[i];
 
   List LAM03(nr), LAM12(nr), cut(nr);
@@ -225,6 +221,39 @@ for(i=0; i<nf; i++){
   }
 
 
+  if(full == TRUE){
+    NumericVector S = pexp(X, lam01, 0.0, 0.0);
+    if(nr == 4){
+      if (sum(del2)==4) {
+        tmp1 +=log(hf(S, del2, 4, 4, rho));
+      }  else if(sum(del2)==3) {
+        tmp1 += log(hf(S, del2, 3, 4, rho));
+      }   else if(sum(del2)==2) {
+        tmp1 += log(hf(S, del2, 2, 4, rho));
+      }  else if(sum(del2)==1) {
+        tmp1 += log(hf(S, del2, 1, 4, rho));
+      }
+    } else{
+      if (sum(del2)==6) {
+        tmp1 += log(hf(S, del2, 6, 6, rho));
+      }  else if(sum(del2)==5) {
+        tmp1 += log(hf(S, del2, 5, 6, rho));
+      }   else if(sum(del2)==4) {
+        tmp1 += log(hf(S, del2, 4, 6, rho));
+      }  else if(sum(del2)==3) {
+        tmp1 += log(hf(S, del2, 3, 6, rho));
+      }  else if(sum(del2)==2) {
+        tmp1 += log(hf(S, del2, 2, 6, rho));
+      }  else if(sum(del2)==1) {
+        tmp1 += log(hf(S, del2, 1, 6, rho));
+      }
+    }
+  }else{
+  NumericMatrix Sf(nr-1, 2);
+  NumericVector Sc(nr-1);
+  NumericMatrix S(pair_nr, 2);
+  IntegerMatrix fam_del2(pair_nr, 2);
+
   for(j=1; j<nr; j++){
     Sf(j-1, 0)  = R::pexp(X[0], 1/lam01, 0.0, 0.0);
     Sf(j-1, 1)  = R::pexp(X[j], 1/lam01, 0.0, 0.0);
@@ -245,6 +274,7 @@ for(i=0; i<nf; i++){
     }
     tmp1 += tmp11/(nr-2);
   }
+  }
 
   for(j=1; j<nr; j++){
     tmp1 += del2[j]*R::dexp(X[j], 1/lam01, 1.0);
@@ -254,6 +284,7 @@ for(i=0; i<nf; i++){
     tmp1 += del3[j]*log(as<NumericVector>(fdpexp(Y[j], LAM12[j], cut[j], 0.0))[0]/as<NumericVector>(fppexp(Y[j], LAM12[j], cut[j], 0.0, 0.0))[0]);
 
   }
+
 
   tmp1 +=  R::dexp(X[0], 1/lam01, 1.0);
   tmp1 += as<NumericVector>(fppexp(X[0], LAM03[0], cut[0], 0.0, 1.0))[0];

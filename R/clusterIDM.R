@@ -6,7 +6,7 @@
 #' @importFrom eha ppch
 #'
 #' @export
-clusterIDM <- function(outdata.F, outdata.proband, outdata.R, outdata.S = NULL, Cr_R, Ar_R, Cr_S =NULL, lam03, Age = NULL, Cal = NULL, fam.id, birth, design, no.death = FALSE){
+clusterIDM <- function(outdata.F, outdata.proband, outdata.R, outdata.S = NULL, Cr_R, Ar_R, Cr_S =NULL, lam03, Age = NULL, Cal = NULL, fam.id, birth, design, full = FALSE, no.death = FALSE){
 
 if(is.null(Age)) Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
 if(is.null(Cal)) Cal = seq(1920, 2011, by=5)
@@ -49,7 +49,7 @@ else par<- c(log(lam01), log(theta), log(rho))
 
 
 pairle <- optim(par, pair.logL, outdata.F = outdata.F0,  outdata.proband = outdata.proband, outdata.R = outdata.R, outdata.S = outdata.S,
-                Cr_R = Cr_R, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, no.death = no.death, method = "BFGS", hessian = TRUE)
+                Cr_R = Cr_R, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 parameter.pair <- exp(pairle$par)
 
@@ -57,14 +57,14 @@ if(design == 1){
   if(no.death == TRUE) {
 
     score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
-                                                       Age = Age, Cal = Cal, lam03 = lam03,
+                                                       Age = Age, Cal = Cal, lam03 = lam03, full = full,
                                                        fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
 
 
   }else {
 
     score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
-                                                       Age = Age, Cal = Cal, lam03 = lam03,
+                                                       Age = Age, Cal = Cal, lam03 = lam03, full = full,
                                                       fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
 
     }

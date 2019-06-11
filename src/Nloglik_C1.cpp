@@ -17,7 +17,7 @@ using namespace Rcpp;
 
 //[[Rcpp::export()]]
 double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband,
-                  NumericVector Age, NumericVector Cal,  DataFrame lam03,
+                  NumericVector Age, NumericVector Cal,  DataFrame lam03, bool full,
                  Function fgau, Function fdpexp, Function fppexp, Function combn){
 
   double lam01 = exp(par[0]);
@@ -67,6 +67,36 @@ double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proba
     IntegerVector idx(nr-1);
     idx = seq(1, nr-1);
 
+
+    if(full == TRUE){
+      NumericVector S = pexp(X, lam01, 0.0, 0.0);
+      if(nr == 4){
+        if (sum(del2)==4) {
+          tmp1 +=log(hf(S, del2, 4, 4, rho));
+        }  else if(sum(del2)==3) {
+          tmp1 += log(hf(S, del2, 3, 4, rho));
+        }   else if(sum(del2)==2) {
+          tmp1 += log(hf(S, del2, 2, 4, rho));
+        }  else if(sum(del2)==1) {
+          tmp1 += log(hf(S, del2, 1, 4, rho));
+        }
+      } else{
+        if (sum(del2)==6) {
+          tmp1 += log(hf(S, del2, 6, 6, rho));
+        }  else if(sum(del2)==5) {
+          tmp1 += log(hf(S, del2, 5, 6, rho));
+        }   else if(sum(del2)==4) {
+          tmp1 += log(hf(S, del2, 4, 6, rho));
+        }  else if(sum(del2)==3) {
+          tmp1 += log(hf(S, del2, 3, 6, rho));
+        }  else if(sum(del2)==2) {
+          tmp1 += log(hf(S, del2, 2, 6, rho));
+        }  else if(sum(del2)==1) {
+          tmp1 += log(hf(S, del2, 1, 6, rho));
+        }
+      }
+    }else{
+
     NumericMatrix Sf(nr-1, 2);
     NumericVector Sc(nr-1);
     NumericMatrix S(pair_nr, 2);
@@ -92,6 +122,7 @@ double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proba
         tmp11 =  log(pClayton(S(j,_), newrho));
       }
       tmp1 += tmp11/(nr-2);
+    }
     }
 
     for(j=0; j<nr; j++){

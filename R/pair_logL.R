@@ -1,13 +1,13 @@
 #===========================================
 # Full history of Proband : Pairwise + Auxiliary
 #=========================================
-pair.logL <-	function(outdata.F, outdata.proband, outdata.R, outdata.S = NULL, par, Cr_R, LAM03.R, cut.R, LAM03.S = NULL, cut.S = NULL,  Age, Cal, design, no.death){
+pair.logL <-	function(outdata.F, outdata.proband, outdata.R, outdata.S = NULL, par, Cr_R, LAM03.R, cut.R, LAM03.S = NULL, cut.S = NULL,  Age, Cal, design, full, no.death){
 
   if(design == 1){
     if(no.death == TRUE) fitter <- get("NloglikFD1")
     else fitter <- get("loglikFD1")
 
-    res <- fitter(par, outdata.F, outdata.proband[, Cr_R], Age, Cal, lam03, gauleg.f, msm::dpexp, msm::ppexp, utils::combn)
+    res <- fitter(par, outdata.F, outdata.proband[, Cr_R], Age, Cal, lam03, full, gauleg.f, msm::dpexp, msm::ppexp, utils::combn)
 
   }else{
     if(no.death == TRUE) fitter <- get("NloglikFD2")
