@@ -126,12 +126,12 @@ if(design == 1){
 
 
   }else {
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(X.proband[i,]),
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(data.proband[i,]),
                                                        Age = Age, Cal = Cal, cut_F = cut, lam03 = lam03, fgau = gauleg.f, combn = utils::combn))
 
   }
   }
-if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = Y.R[i,], X_R = X.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
+if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = Y.R[i,], X_R = data.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
 
 if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
