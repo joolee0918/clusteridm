@@ -18,7 +18,7 @@ using namespace Rcpp;
 //[[Rcpp::export()]]
 double NloglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proband,
                   NumericVector Age, NumericVector Cal,  DataFrame lam03, bool full,
-                 Function fgau, Function fdpexp, Function fppexp, Function combn){
+                 Function fgau, Function combn){
 
   double rho = par[0];
   double lam01 = exp(par[1]);
