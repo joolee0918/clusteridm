@@ -113,7 +113,7 @@ double loglikS(NumericVector par, DataFrame outdata_S, List LAM03S, List cutS, F
 
 
 //[[Rcpp::export()]]
-double loglikS_pch( NumericVector par, NumericVector cut_F, DataFrame outdata_S, List LAM03S, List cutS, Function fgau){
+double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List cutS, Function fgau){
 
   int i;
   double theta = exp(par[0]);
@@ -123,8 +123,8 @@ double loglikS_pch( NumericVector par, NumericVector cut_F, DataFrame outdata_S,
 
 
   for(i=0; i<LAM03S.size(); i++) {
-    double C0 = as<NumericVector>(outdata_S["C"])[i];
-    int del2 = as<NumericVector>(outdata_S["del2"])[i];
+    double C0 = Y_S(i, 0);
+    int del2 = Y_S(i,1);
 
     NumericVector LAM03_S = LAM03S[i];
     NumericVector LAM12_S = theta*LAM03_S;

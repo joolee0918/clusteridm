@@ -16,8 +16,8 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
   new.R.formula <- update.formula(R.formula,  paste("~.+", paste(first.visit.age.R, birth, sep="+")))
 
-  outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
-  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
+  #outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
+  #outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
   outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
   outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
 
@@ -97,7 +97,7 @@ if(is.null(init)){
 }
 
 
-pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S, X.S =data.S,
+pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
                 cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 parameter.pair <- exp(pairle$par)
@@ -127,19 +127,18 @@ if(design == 1){
 
   }else {
 
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
-                                                       Age = Age, Cal = Cal, lam03 = lam03,
-                                                       fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn, ppch = eha::ppch))
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_fam = Y.fam[i,], X_fam = X.fam[i,], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(X.proband[i,]),
+                                                       Age, Cal, cut, lam03, gauleg.f, utils::combn))
 
   }
   }
-if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR, x=pairle$par,  outdata_R = outdata.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
+if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut = cut, Y_R = Y.R[i,], X_R = X.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
 
 if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
-  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS, x=pairle$par,  outdata_S = outdata.S[i,], LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
+  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS, x=pairle$par,  outdata_S = outdata.S[i,], LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
   }else{
-    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS, x=pairle$par,  outdata_S = outdata.S[i,], LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
+    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut = cut, Y_S = Y.S[i,],LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
   }
 }
 B <- score_i%*%t(score_i)

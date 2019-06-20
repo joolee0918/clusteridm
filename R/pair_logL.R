@@ -2,7 +2,7 @@
 # Full history of Proband : Pairwise + Auxiliary
 #=========================================
 
-pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S = NULL, X.S = NULL,
+pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S = NULL,
                         cut = cut, LAM03.R, cut.R, LAM03.S = NULL, cut.S = NULL,  Age, Cal, design, full, no.death){
 
 
@@ -25,9 +25,9 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S =
   auxtmp2 <- 0
   if(!is.null(LAM03.S) & !is.null(cut.S)) {
     if(no.death == TRUE) fitter <- get("NloglikS")
-    else fitter <- get("loglikS")
+    else fitter <- get("loglikS_pch")
 
-    auxtmp2 <- fitter(outdata.S, par, LAM03.S, cut.S, gauleg.f, msm::dpexp, msm::ppexp)
+    auxtmp2 <- fitter(par, cut, Y.S, LAM03.S, cut.S, gauleg.f)
 
   }
   res = res + auxtmp1 + auxtmp2
