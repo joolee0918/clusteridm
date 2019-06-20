@@ -201,7 +201,7 @@ double loglikFD1_pch(NumericVector par, NumericVector cut_F, List outdata_F, Num
                  Function fgau, Function combn){
 
   double theta = exp(par[0]);
-  double rho = exp(par[1]);
+  double rho = par[1];
   double newrho = rho/(1+rho);
   NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
 
