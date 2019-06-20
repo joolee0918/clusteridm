@@ -293,7 +293,7 @@ double loglikFD2_pch(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_pro
   NumericVector ww1(20*20);
   NumericVector ww2(20*20);
 
-#pragma omp parallel for private(i, j, l, k, gauss_quad, u, u1, u2, w, w1, w2, sq, rep1, rep2, uu1, uu2, ww1, ww2, tmp1, tmp2, tmp3, tmp5, tmp7, tmp8) num_threads(4) reduction(+: rr)
+//#pragma omp parallel for private(i, j, l, k, gauss_quad, u, u1, u2, w, w1, w2, sq, rep1, rep2, uu1, uu2, ww1, ww2, tmp1, tmp2, tmp3, tmp5, tmp7, tmp8) num_threads(4) reduction(+: rr)
   for(i=0; i<nf; i++){
     tmp1 = tmp2 = tmp3 = tmp5 = tmp7 = tmp8 = 0;
 
