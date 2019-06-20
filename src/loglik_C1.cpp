@@ -403,7 +403,7 @@ double loglikFD1_pch(NumericVector par, NumericVector cut_F, List outdata_F, Num
 
 
     if(full == TRUE){
-      NumericVector S = ppc(X, lam01, cut_F, 0.0, 0.0);
+      NumericVector S = vppc(X, lam01, cut_F, 0.0, 0.0);
       if(nr == 4){
         if (sum(del2)==4) {
           tmp1 +=log(hf(S, del2, 4, 4, rho));
@@ -436,9 +436,9 @@ double loglikFD1_pch(NumericVector par, NumericVector cut_F, List outdata_F, Num
       IntegerMatrix fam_del2(pair_nr, 2);
 
       for(j=1; j<nr; j++){
-        Sf(j-1, 0)  = ppc(X[0], lam01, cut_F, 0.0, 0.0)[0];
-        Sf(j-1, 1)  = ppc(X[j], lam01, cut_F, 0.0, 0.0)[0];
-        Sc[j-1]  = h1(ppc(X[0], lam01, cut_F, 0.0, 0.0)[0], ppc(X[j], lam01, cut_F, 0.0, 0.0)[0], rho);
+        Sf(j-1, 0)  = ppc(X[0], lam01, cut_F, 0.0, 0.0);
+        Sf(j-1, 1)  = ppc(X[j], lam01, cut_F, 0.0, 0.0);
+        Sc[j-1]  = h1(ppc(X[0], lam01, cut_F, 0.0, 0.0), ppc(X[j], lam01, cut_F, 0.0, 0.0), rho);
       }
 
       for(j=0; j<pair_nr; j++){
@@ -458,24 +458,24 @@ double loglikFD1_pch(NumericVector par, NumericVector cut_F, List outdata_F, Num
     }
 
     for(j=1; j<nr; j++){
-      tmp1 += del2[j]*dpc(X[j], lam01, cut_F, 1.0)[0];
-      tmp1 += as<NumericVector>(ppc(X[j], LAM03[j], cut[j],  0.0, 1.0))[0];
-      tmp1 += del1[j]*(1-del2[j])*log(dpc(X[j], LAM03[j], cut[j], 0.0)[0]/ppc(X[j], LAM03[j], cut[j], 0.0, 0.0)[0]);
-      tmp1 += del2[j]*log(ppc(Y[j], LAM12[j], cut[j], 0.0, 0.0)[0]/ppc(X[j], LAM12[j], cut[j], 0.0, 0.0)[0]);
-      tmp1 += del3[j]*log(dpc(Y[j], LAM12[j], cut[j], 0.0)[0]/ppc(Y[j], LAM12[j], cut[j], 0.0, 0.0)[0]);
+      tmp1 += del2[j]*dpc(X[j], lam01, cut_F, 1.0);
+      tmp1 += ppc(X[j], LAM03[j], cut[j],  0.0, 1.0);
+      tmp1 += del1[j]*(1-del2[j])*log(dpc(X[j], LAM03[j], cut[j], 0.0)/ppc(X[j], LAM03[j], cut[j], 0.0, 0.0));
+      tmp1 += del2[j]*log(ppc(Y[j], LAM12[j], cut[j], 0.0, 0.0)/ppc(X[j], LAM12[j], cut[j], 0.0, 0.0));
+      tmp1 += del3[j]*log(dpc(Y[j], LAM12[j], cut[j], 0.0)/ppc(Y[j], LAM12[j], cut[j], 0.0, 0.0));
 
     }
 
 
-    tmp1 +=  dpc(X[0], lam01, cut_F, 1.0)[0];
-    tmp1 += ppc(X[0], LAM03[0], cut[0], 0.0, 1.0)[0];
-    tmp1 += log(ppc(Y[0], LAM12[0], cut[0], 0.0, 0.0)[0]/ppc(X[0], LAM12[0], cut[0], 0.0, 0.0)[0]);
+    tmp1 +=  dpc(X[0], lam01, cut_F, 1.0);
+    tmp1 += ppc(X[0], LAM03[0], cut[0], 0.0, 1.0);
+    tmp1 += log(ppc(Y[0], LAM12[0], cut[0], 0.0, 0.0)/ppc(X[0], LAM12[0], cut[0], 0.0, 0.0));
 
 
     NumericMatrix gauss_quad = fgau(20, 0, C0);
     NumericVector u = gauss_quad(_,0);
     NumericVector w = gauss_quad(_,1);
-    tmp1 += -log(sum(w*dpc(u, lam01, cut_F, 0.0)*ppc(u, LAM03[0], cut[0], 0.0, 0.0)*ppc(C0, LAM12[0], cut[0],  0.0, 0.0)[0]/ppc(u, LAM12[0], cut[0], 0.0, 0.0)));
+    tmp1 += -log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03[0], cut[0], 0.0, 0.0)*ppc(C0, LAM12[0], cut[0],  0.0, 0.0)/vppc(u, LAM12[0], cut[0], 0.0, 0.0)));
   }
   return(tmp1);
 }
