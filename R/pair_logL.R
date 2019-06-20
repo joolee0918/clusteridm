@@ -7,16 +7,17 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
 
 
   if(design == 1){
-    if(no.death == TRUE) fitter <- get("NloglikFD1")
-    else fitter <- get("loglikFD1_pch")
+    if(no.death == TRUE) res <- NloglikFD1(par, outdata.F0, outdata.proband, Age, Cal, lam03, full, gauleg.f, msm::dpexp, msm::ppexp, utils::combn)
+    else res <- loglikFD1_pch(par, cut, outdata.F0, outdata.proband, Age, Cal, lam03, full, gauleg.f, utils::combn)
 
-    res <- fitter(par, cut, outdata.F0, outdata.proband, Age, Cal, lam03, full, gauleg.f, utils::combn)
+
 
   }else{
-    if(no.death == TRUE) fitter <- get("NloglikFD2")
-    else fitter <- get("loglikFD2_pch")
+    if(no.death == TRUE) res <- NloglikFD2(par, Y.fam, X.fam, as.matrix(Y.proband), as.matrix(X.proband),  Age, Cal, cut, lam03, gauleg.f, utils::combn)
 
-    res <- loglikFD2_pch(par, Y.fam, X.fam, as.matrix(Y.proband), as.matrix(X.proband),  Age, Cal, cut, lam03, gauleg.f, utils::combn)
+    else res <- loglikFD2_pch(par, Y.fam, X.fam, as.matrix(Y.proband), as.matrix(X.proband),  Age, Cal, cut, lam03, gauleg.f, utils::combn)
+
+
 
   }
 

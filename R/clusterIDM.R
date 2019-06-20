@@ -98,7 +98,7 @@ if(is.null(init)){
 
 
 pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
-                outdata.F0 = outdata.F0, outdata.proband = outdata.proband, cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
+                outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 parameter.pair <- exp(pairle$par)
 
@@ -114,7 +114,7 @@ if(design == 1){
 
     score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1_pch,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
                                                        Age = Age, Cal = Cal, lam03 = lam03, full = full,
-                                                      fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
+                                                      fgau = gauleg.f, combn = utils::combn))
 
     }
   }else{
