@@ -126,9 +126,8 @@ if(design == 1){
 
 
   }else {
-
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_fam = Y.fam[i,], X_fam = X.fam[i,], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(X.proband[i,]),
-                                                       Age, Cal, cut, lam03, gauleg.f, utils::combn))
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i,], X_F = X.fam[i,], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(X.proband[i,]),
+                                                       Age = Age, Cal = Cal, cut_F = cut, lam03 = lam03, fgau = gauleg.f, combn = utils::combn))
 
   }
   }
