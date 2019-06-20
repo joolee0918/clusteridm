@@ -86,7 +86,7 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
 Y.fam<- split(as.data.frame(Y.fam), as.factor(data.fam[, "fid"]))
 Y.fam <- lapply(1:length(Y.fam), function(i) as.matrix(Y.fam[[i]]))
 X.fam<- split(as.data.frame(data.fam), as.factor(data.fam[, "fid"]))
-
+outdata.F0 <- split(outdata.fam, as.factor(outdata.fam[, fam.id]))
 
 if(is.null(init)){
   if(no.death == TRUE) par <- c(rho, log(lam01))
@@ -98,21 +98,21 @@ if(is.null(init)){
 
 
 pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
-                cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
+                outdata.F0 = outdata.F0, outdata.proband = outdata.proband, cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 parameter.pair <- exp(pairle$par)
 
 if(design == 1){
   if(no.death == TRUE) {
 
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
                                                        Age = Age, Cal = Cal, lam03 = lam03, full = full,
                                                        fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
 
 
   }else {
 
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1_pch,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
                                                        Age = Age, Cal = Cal, lam03 = lam03, full = full,
                                                       fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn))
 
@@ -120,7 +120,7 @@ if(design == 1){
   }else{
   if(no.death == TRUE) {
 
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD2,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,Cr_R],
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=NloglikFD2,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
                                                        Age = Age, Cal = Cal, lam03 = lam03,
                                                        fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn, ppch = eha::ppch))
 
