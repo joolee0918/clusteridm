@@ -61,8 +61,8 @@ loglikS <- function(par, outdata_S, LAM03S, cutS, fgau, fdpexp, fppexp) {
     .Call(`_clusteridm_loglikS`, par, outdata_S, LAM03S, cutS, fgau, fdpexp, fppexp)
 }
 
-loglikS_pch <- function(par, cut_F, outdata_S, LAM03S, cutS, fgau) {
-    .Call(`_clusteridm_loglikS_pch`, par, cut_F, outdata_S, LAM03S, cutS, fgau)
+loglikS_pch <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
+    .Call(`_clusteridm_loglikS_pch`, par, cut_F, Y_S, LAM03S, cutS, fgau)
 }
 
 NloglikS <- function(outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp) {

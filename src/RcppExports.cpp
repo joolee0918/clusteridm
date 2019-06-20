@@ -268,18 +268,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // loglikS_pch
-double loglikS_pch(NumericVector par, NumericVector cut_F, DataFrame outdata_S, List LAM03S, List cutS, Function fgau);
-RcppExport SEXP _clusteridm_loglikS_pch(SEXP parSEXP, SEXP cut_FSEXP, SEXP outdata_SSEXP, SEXP LAM03SSEXP, SEXP cutSSEXP, SEXP fgauSEXP) {
+double loglikS_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_S, List LAM03S, List cutS, Function fgau);
+RcppExport SEXP _clusteridm_loglikS_pch(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_SSEXP, SEXP LAM03SSEXP, SEXP cutSSEXP, SEXP fgauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type par(parSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type cut_F(cut_FSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type outdata_S(outdata_SSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y_S(Y_SSEXP);
     Rcpp::traits::input_parameter< List >::type LAM03S(LAM03SSEXP);
     Rcpp::traits::input_parameter< List >::type cutS(cutSSEXP);
     Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
-    rcpp_result_gen = Rcpp::wrap(loglikS_pch(par, cut_F, outdata_S, LAM03S, cutS, fgau));
+    rcpp_result_gen = Rcpp::wrap(loglikS_pch(par, cut_F, Y_S, LAM03S, cutS, fgau));
     return rcpp_result_gen;
 END_RCPP
 }
