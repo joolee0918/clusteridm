@@ -9,20 +9,60 @@ NloglikFD2 <- function(par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, f
     .Call(`_clusteridm_NloglikFD2`, par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, fdpexp, fppexp, combn, ppch)
 }
 
+hpc <- function(x, levels, cuts, logf) {
+    .Call(`_clusteridm_hpc`, x, levels, cuts, logf)
+}
+
+Hpc <- function(x, levels, cuts, logf) {
+    .Call(`_clusteridm_Hpc`, x, levels, cuts, logf)
+}
+
+ppc <- function(q, levels, cuts, lower, logf) {
+    .Call(`_clusteridm_ppc`, q, levels, cuts, lower, logf)
+}
+
+vppc <- function(q, levels, cuts, lower, logf) {
+    .Call(`_clusteridm_vppc`, q, levels, cuts, lower, logf)
+}
+
+dpc <- function(x, levels, cuts, logf) {
+    .Call(`_clusteridm_dpc`, x, levels, cuts, logf)
+}
+
+vdpc <- function(x, levels, cuts, logf) {
+    .Call(`_clusteridm_vdpc`, x, levels, cuts, logf)
+}
+
 loglikFD1 <- function(par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn) {
     .Call(`_clusteridm_loglikFD1`, par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn)
+}
+
+loglikFD1_pch <- function(par, cut_F, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, combn) {
+    .Call(`_clusteridm_loglikFD1_pch`, par, cut_F, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, combn)
 }
 
 loglikFD2 <- function(par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, fdpexp, fppexp, combn, ppch) {
     .Call(`_clusteridm_loglikFD2`, par, outdata_F, outdata_proband, Age, Cal, lam03, fgau, fdpexp, fppexp, combn, ppch)
 }
 
+loglikFD2_pch <- function(par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn) {
+    .Call(`_clusteridm_loglikFD2_pch`, par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn)
+}
+
 loglikR <- function(outdata_R, par, LAM03R, cutR, fgau, fdpexp, fppexp) {
     .Call(`_clusteridm_loglikR`, outdata_R, par, LAM03R, cutR, fgau, fdpexp, fppexp)
 }
 
-loglikS <- function(outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp) {
-    .Call(`_clusteridm_loglikS`, outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp)
+loglikR_pch <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
+    .Call(`_clusteridm_loglikR_pch`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
+}
+
+loglikS <- function(par, outdata_S, LAM03S, cutS, fgau, fdpexp, fppexp) {
+    .Call(`_clusteridm_loglikS`, par, outdata_S, LAM03S, cutS, fgau, fdpexp, fppexp)
+}
+
+loglikS_pch <- function(par, cut_F, outdata_S, LAM03S, cutS, fgau) {
+    .Call(`_clusteridm_loglikS_pch`, par, cut_F, outdata_S, LAM03S, cutS, fgau)
 }
 
 NloglikS <- function(outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp) {
