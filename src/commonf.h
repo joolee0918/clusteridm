@@ -21,5 +21,11 @@ double h1(double u1, double u2, double rho);
 NumericVector vh1(NumericVector u1, NumericVector u2, double rho);
 NumericVector cumsum3(NumericVector x);
 NumericVector cumprod3(NumericVector x);
+NumericVector hpc(NumericVector x, NumericVector levels, NumericVector cuts,  int logf);
+NumericVector Hpc(NumericVector x, NumericVector levels, NumericVector cuts,  int logf);
+double ppc(double q, NumericVector levels, NumericVector cuts, int lower, int logf);
+double dpc(double x, NumericVector levels, NumericVector cuts, int logf);
+NumericVector vppc(NumericVector q, NumericVector levels, NumericVector cuts, int lower, int logf);
+NumericVector vdpc(NumericVector x, NumericVector levels, NumericVector cuts, int logf);
 #endif
 

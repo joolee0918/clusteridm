@@ -139,7 +139,7 @@ generate_con <- function(id, mi, lam01, lam12, lam03, ktau, proband, sen, u0) {
       multY[i] = tmpy$time
       multdel3[i] = tmpy$status
     } else {
-      multY[i] = 0
+      multY[i] = 2010.5-B[i]
       multdel3[i] = 0
     }
   }
@@ -201,7 +201,7 @@ generate_mar <- function(id, B0, R0, lam01, lam12, lam03, sen){
     multdel3 <- tmp$status
     multdel1 <- 0
   }else {
-    multY <- 0; multdel3 <- 0
+    multY <- F0-B0; multdel3 <- 0
   }
 
   res <- data.frame(id=id, B=B0, X=multX, Y=multY, del1=multdel1, del2=multdel2,  del3=multdel3, u = u )

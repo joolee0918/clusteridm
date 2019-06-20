@@ -4,52 +4,101 @@
 #' @importFrom msm dpexp ppexp
 #' @importFrom utils combn
 #' @importFrom eha ppch
+#' @importFrom lubridate ymd ydate year
 #'
 #' @export
-clusterIDM <- function(outdata.F, outdata.proband, outdata.R, outdata.S = NULL, Cr_R, Ar_R, Cr_S =NULL, lam03, Age = NULL, Cal = NULL, fam.id, birth, design, full = FALSE, no.death = FALSE){
+clusterIDM <- function(fam.formula, R.formula, S.formula,
+                       outdata.fam, outdata.R, outdata.S = NULL,
+                       fam.id, fam.rel, recruit.age.fam,
+                       first.visit.age.R, R.id, recruit.age.S =NULL,
+                       birth, cut=0, lam03, Age = NULL, Cal = NULL, design, full = FALSE, no.death = FALSE, init = NULL){
 
-if(is.null(Age)) Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
-if(is.null(Cal)) Cal = seq(1920, 2011, by=5)
+  new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
+  new.R.formula <- update.formula(R.formula,  paste("~.+", paste(first.visit.age.R, birth, sep="+")))
 
-nr <- nrow(outdata.R)
-A.R <- Ar_R - outdata.R[, birth]
-C.B0 <- lapply(1:nr, function(i) outdata.R[i, birth]+ Age)
-C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
+  outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
+  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
+  outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
+  outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
 
-Cf.F <- lapply(1:nr, function(i) unique(C[[i]][outdata.R[i, birth] <= C[[i]] & C[[i]] <= Ar_R]))
-Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - outdata.R[i, birth])
+  m.fam <- model.frame(new.fam.formula, data = outdata.fam)
+  m.proband <- model.frame(new.R.formula, data = outdata.proband)
+  m.R <- model.frame(new.R.formula, data = outdata.R)
 
-R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
-A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+  Y.fam <- as.matrix(model.extract(m.fam, "response"))
+  Y.proband <- as.matrix(model.extract(m.proband, "response"))
+  Y.R <- as.matrix(model.extract(m.R, "response"))
 
-LAM03.R <-  lapply(1:nr, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
-cut.R <- Af.F
+  data.fam <- model.matrix(new.fam.formula, outdata.fam)[,-1]
+  colnames(data.fam) <- c("fid", "rel.id", "exam.age", "B")
 
-LAM03.S <- cut.S <- NULL
-if(!is.null(outdata.S)){
-ns <- nrow(outdata.S)
-A.S <- Cr_S - outdata.S[, birth]
-C.B0 <- lapply(1:nr, function(i) outdata.S[i, birth]+ Age)
-C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
+  data.proband <- model.matrix(new.R.formula, outdata.proband)[,-1]
+  data.R <- model.matrix(new.R.formula, outdata.R)[,-1]
+  colnames(data.proband) <- c("exam.age", "B")
+  colnames(data.R) <- c("exam.age", "B")
 
-Cf.F <- lapply(1:nr, function(i) unique(C[[i]][outdata.S[i, birth] <= C[[i]] & C[[i]] <= Cr_S]))
-Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - outdata.S[i, birth])
+  Y.S <- data.S <- NULL
+  if(!is.null(S.formula)) {
+    new.S.formula <- update.formula(S.formula,  paste("~.+", paste(recruit.age.S, birth, sep="+")))
+    m.S <- model.frame(new.S.formula, outdata.S)
+    Y.S <- as.matrix(model.extract(m.S, "response"))
+    data.S <- model.matrix(new.S.formula, outdata.S)[,-1]
+    colnames(data.R) <- c("exam.age", "B")
+  }
 
-R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
-A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+ if(is.null(Age)) Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
+ if(is.null(Cal)) Cal = seq(1890, 2015, by=5)
 
-cut.S <- Af.F
-LAM03.S <-  lapply(1:ns, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
+  lam03$Year.f <- rep(seq(1, length(Cal)), each=length(Age))
+  lam03$Age.f <- rep(seq(1, length(Age)), length(Cal))
+
+  nr <- nrow(outdata.R)
+  C.B0 <- lapply(1:nr, function(i) data.R[i, "B"]+ Age)
+  C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
+
+  Cf.F <- lapply(1:nr, function(i) unique(C[[i]][data.R[i, "B"] <= C[[i]] & C[[i]] <= Y.R[i,2] + data.R[i, "B"] ]))
+  Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - data.R[i, "B"])
+
+  R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
+  A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+
+  LAM03.R <-  lapply(1:nr, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
+  cut.R <- lapply(1:nr, function(j) Af.F[[j]][-1])
+
+  LAM03.S <- cut.S <- NULL
+  if(!is.null(outdata.S)){
+  ns <- nrow(outdata.S)
+  C.B0 <- lapply(1:nr, function(i) data.S[i, birth]+ Age)
+  C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
+
+  Cf.F <- lapply(1:nr, function(i) unique(C[[i]][data.S[i, birth] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, birth]]))
+  Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - data.S[i, birth])
+
+  R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
+  A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+
+  LAM03.S <-  lapply(1:ns, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
+  cut.S <- lapply(1:nr, function(j) Af.F[[j]][-1])
 }
 
-outdata.F0 <- split(outdata.F, as.factor(outdata.F[, fam.id]))
-
-if(no.death == TRUE) par<- c(log(lam01), log(rho))
-else par<- c(log(lam01), log(theta), log(rho))
 
 
-pairle <- optim(par, pair.logL, outdata.F = outdata.F0,  outdata.proband = outdata.proband, outdata.R = outdata.R, outdata.S = outdata.S,
-                Cr_R = Cr_R, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
+Y.fam<- split(as.data.frame(Y.fam), as.factor(data.fam[, "fid"]))
+Y.fam <- lapply(1:length(Y.fam), function(i) as.matrix(Y.fam[[i]]))
+X.fam<- split(as.data.frame(data.fam), as.factor(data.fam[, "fid"]))
+
+
+if(is.null(init)){
+  if(no.death == TRUE) par <- c(rho, log(lam01))
+  else par<- c(log(theta), rho, log(lam01))
+
+}else{
+  par <- init
+}
+
+
+pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S, X.S =data.S,
+                cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 parameter.pair <- exp(pairle$par)
 
@@ -83,8 +132,8 @@ if(design == 1){
                                                        fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp, combn = utils::combn, ppch = eha::ppch))
 
   }
-}
-score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR, x=pairle$par,  outdata_R = outdata.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
+  }
+if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR, x=pairle$par,  outdata_R = outdata.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
 
 if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
@@ -93,7 +142,8 @@ if(!is.null(outdata.S)) {
     score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS, x=pairle$par,  outdata_S = outdata.S[i,], LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f, fdpexp = msm::dpexp, fppexp = msm::ppexp))
   }
 }
-B <- score_i%*%t(score_i) + score_r%*%t(score_r)
+B <- score_i%*%t(score_i)
+if(no.death == FALSE)  B <- B + score_r%*%t(score_r)
 if(!is.null(outdata.S)) B <- B +  score_s%*%t(score_s)
 
 A <- pairle$hessian
