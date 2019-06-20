@@ -18,9 +18,9 @@ using namespace Rcpp;
 double NloglikFD2(NumericVector par, List outdata_F, NumericVector outdata_proband,
                   NumericVector Age, NumericVector Cal,  DataFrame lam03,
                   Function fgau, Function fdpexp, Function fppexp, Function combn, Function ppch){
+  double rho = par[0];
+  double lam01 = exp(par[1]);
 
-  double lam01 = exp(par[0]);
-  double rho = exp(par[1]);
   double newrho = rho/(1+rho);
   double rr=0;
 

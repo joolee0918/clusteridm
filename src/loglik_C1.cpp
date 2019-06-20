@@ -19,7 +19,7 @@ double loglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proban
                 Function fgau, Function fdpexp, Function fppexp, Function combn){
 
   double theta = exp(par[0]);
-  double rho = exp(par[1]);
+  double rho = par[1];
   double lam01 = exp(par[2]);
 
   double newrho = rho/(1+rho);
