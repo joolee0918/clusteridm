@@ -78,7 +78,7 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
 
   LAM03.S <-  lapply(1:ns, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
-  cut.S <- lapply(1:nr, function(j) Af.F[[j]][-1])
+  cut.S <- lapply(1:ns, function(j) Af.F[[j]][-1])
 }
 
 
