@@ -46,16 +46,16 @@ double loglikR(DataFrame outdata_R, NumericVector par, List LAM03R, List cutR, F
 
 
 //[[Rcpp::export()]]
-double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List cutR, Function fgau){
+double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  Function fgau){
 
   int i;
  double theta = exp(par[0]);
- NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
+ NumericVector lam01 = exp(par[seq(1, par.size()-1)]);
 
 
   double auxtmp1 = 0;
 
-  for(i=0; i<LAM03R.size(); i++) {
+  for(i=0; i<Y_R.nrow(); i++) {
     double C0 = X_R(i, 0);
     double X = Y_R(i, 0);
 
@@ -171,31 +171,33 @@ double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, 
 
 
 //[[Rcpp::export()]]
-double NloglikS(DataFrame outdata_S, NumericVector par, List LAM03S, List cutS, Function fgau, Function fdpexp, Function fppexp){
+double NloglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, Function fgau){
 
   int i;
-  double lam01 = exp(par[0]);
+  double theta = exp(par[0]);
+  NumericVector lam01 = exp(par[seq(1, par.size()-1)]);
 
   double auxtmp2 = 0;
 
 
-  for(i=0; i<LAM03S.size(); i++) {
-    double C0 = as<NumericVector>(outdata_S["C"])[i];
-    int del2 = as<NumericVector>(outdata_S["del2"])[i];
+  for(i=0; i<Y_S.nrow(); i++) {
+    double C0 = Y_S(i, 0);
+    int del2 = Y_S(i,1);
 
 
     NumericMatrix gauss_quad = fgau(20, 0, C0);
     NumericVector u = gauss_quad(_,0);
     NumericVector w = gauss_quad(_,1);
 
-    auxtmp2 += ((1-del2)*log(exp(-lam01*C0))
-                  + del2*log(sum(w*dexp(u, lam01)))
-                  - log(exp(-lam01*C0)+ sum(w*dexp(u, lam01))));
+    auxtmp2 += ((1-del2)*log(ppc(C0, lam01, cut_F, 0.0, 0.0))
+                  + del2*log(sum(w*vdpc(u, lam01, cut_F, 0.0)))
+                  - log(ppc(C0, lam01, cut_F, 0.0, 0.0)+ sum(w*vdpc(u, lam01, cut_F, 0.0))));
 
   }
 
   return(auxtmp2);
 
 }
+
 
 
