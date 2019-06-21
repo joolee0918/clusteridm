@@ -53,6 +53,10 @@ loglikR <- function(outdata_R, par, LAM03R, cutR, fgau, fdpexp, fppexp) {
     .Call(`_clusteridm_loglikR`, outdata_R, par, LAM03R, cutR, fgau, fdpexp, fppexp)
 }
 
+NloglikR_pch <- function(par, cut_F, Y_R, X_R, fgau) {
+    .Call(`_clusteridm_NloglikR_pch`, par, cut_F, Y_R, X_R, fgau)
+}
+
 loglikR_pch <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
     .Call(`_clusteridm_loglikR_pch`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
 }
@@ -65,7 +69,7 @@ loglikS_pch <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
     .Call(`_clusteridm_loglikS_pch`, par, cut_F, Y_S, LAM03S, cutS, fgau)
 }
 
-NloglikS <- function(outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp) {
-    .Call(`_clusteridm_NloglikS`, outdata_S, par, LAM03S, cutS, fgau, fdpexp, fppexp)
+NloglikS_pch <- function(par, cut_F, Y_S, fgau) {
+    .Call(`_clusteridm_NloglikS_pch`, par, cut_F, Y_S, fgau)
 }
 
