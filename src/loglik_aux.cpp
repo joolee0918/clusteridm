@@ -46,11 +46,36 @@ double loglikR(DataFrame outdata_R, NumericVector par, List LAM03R, List cutR, F
 
 
 //[[Rcpp::export()]]
-double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List cutR, Function fgau){
+double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List cutR, Function fgau){
 
   int i;
  double theta = exp(par[0]);
  NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
+
+
+  double auxtmp1 = 0;
+
+  for(i=0; i<LAM03R.size(); i++) {
+    double C0 = X_R(i, 0);
+    double X = Y_R(i, 0);
+
+    NumericMatrix gauss_quad = fgau(20, 0, C0);
+    NumericVector u = gauss_quad(_,0);
+    NumericVector w = gauss_quad(_,1);
+
+    auxtmp1 += log(dpc(X, lam01, cut_F, 0.0)) -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)));
+  }
+
+  return(auxtmp1);
+
+}
+
+//[[Rcpp::export()]]
+double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List cutR, Function fgau){
+
+  int i;
+  double theta = exp(par[0]);
+  NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
 
 
   double auxtmp1 = 0;
