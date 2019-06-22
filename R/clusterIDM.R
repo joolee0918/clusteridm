@@ -89,7 +89,7 @@ X.fam<- split(as.data.frame(data.fam), as.factor(data.fam[, "fid"]))
 outdata.F0 <- split(outdata.fam, as.factor(outdata.fam[, fam.id]))
 
 if(is.null(init)){
-  if(no.death == TRUE) par <- c(log(theta), log(lam01))
+  if(no.death == TRUE) par <- c(rho, log(lam01))
   else par<- c(log(theta), rho, log(lam01))
 
 }else{
@@ -131,13 +131,13 @@ if(design == 1){
 
   }
   }
-if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = Y.R[i,], X_R = data.R[i,], LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
-else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = Y.R[i,], X_R = data.R[i,], fgau = gauleg.f))
+if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
+else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f))
 if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
-  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS_pch, x=pairle$par,  outdata_S = outdata.S[i,], fgau = gauleg.f))
+  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS_pch, x=pairle$par,  outdata_S = as.matrix(outdata.S[i,]), fgau = gauleg.f))
   }else{
-    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut_F = cut, Y_S = Y.S[i,],LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
+    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut_F = cut, Y_S = as.matrix(Y.S[i,]) ,LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
   }
 }
 B <- score_i%*%t(score_i)

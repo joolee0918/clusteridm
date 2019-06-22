@@ -49,8 +49,7 @@ double loglikR(DataFrame outdata_R, NumericVector par, List LAM03R, List cutR, F
 double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  Function fgau){
 
   int i;
- double theta = exp(par[0]);
- NumericVector lam01 = exp(par[seq(1, par.size()-1)]);
+  NumericVector lam01 = exp(par[seq(1, par.size()-1)]);
 
 
   double auxtmp1 = 0;
@@ -174,7 +173,6 @@ double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, 
 double NloglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, Function fgau){
 
   int i;
-  double theta = exp(par[0]);
   NumericVector lam01 = exp(par[seq(1, par.size()-1)]);
 
   double auxtmp2 = 0;
