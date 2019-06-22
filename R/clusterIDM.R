@@ -138,7 +138,7 @@ if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR
 else {
   for(i in 1:nr){
     print(i)
-    score_r[i,] <- numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f))
+    score_r[i,] <- numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f)
   }
   score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f))
 }
