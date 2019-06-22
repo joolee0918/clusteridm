@@ -22,12 +22,12 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
   }
 
   auxtmp1 <- 0
-  if(no.death == FALSE) auxtmp1 <- loglikR_pch( par, cut, Y.R, X.R,  LAM03.R, cut.R, gauleg.f)
+  if(no.death == FALSE) auxtmp1 <- loglikR_pch( par[-1], cut, Y.R, X.R,  LAM03.R, cut.R, gauleg.f)
   else  auxtmp1 <- NloglikR_pch( par, cut, Y.R, X.R, gauleg.f)
 
   auxtmp2 <- 0
   if(!is.null(LAM03.S) & !is.null(cut.S)) {
-    if(no.death == TRUE) auxtmp2 <- NloglikS_pch(par, cut, Y.S,  gauleg.f)
+    if(no.death == TRUE) auxtmp2 <- NloglikS_pch(par[-1], cut, Y.S,  gauleg.f)
     else auxtmp2 <- loglikS_pch(par, cut, Y.S, LAM03.S, cut.S, gauleg.f)
 
   }
