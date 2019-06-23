@@ -18,8 +18,8 @@ double loglikFD1(NumericVector par, List outdata_F, NumericVector outdata_proban
                 NumericVector Age, NumericVector Cal,  DataFrame lam03, bool full,
                 Function fgau, Function fdpexp, Function fppexp, Function combn){
 
-  double theta = exp(par[0]);
-  double rho = par[1];
+  double theta = exp(par[1]);
+  double rho = par[0];
   double lam01 = exp(par[2]);
 
   double newrho = rho/(1+rho);
@@ -200,8 +200,8 @@ double loglikFD1_pch(NumericVector par, NumericVector cut_F, List outdata_F, Num
                  NumericVector Age, NumericVector Cal,  DataFrame lam03, bool full,
                  Function fgau, Function combn){
 
-  double theta = exp(par[0]);
-  double rho = par[1];
+  double theta = exp(par[1]);
+  double rho = par[0];
   double newrho = rho/(1+rho);
   NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
 
