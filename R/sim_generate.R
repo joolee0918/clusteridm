@@ -7,62 +7,6 @@
 
 #' @importFrom timereg pc.hazard
 #' @importFrom copula cCopula claytonCopula iTau
-# ----------------------------------------------------------
-# Marginal function of Exponential distribution
-# ----------------------------------------------------------
-
-marg.f <- function(lam, kap, beta, xx, tt){
-  #p <- length(beta)
-  #xx <- matrix(xx, ncol=p)
-  #beta <- matrix(beta, ncol=1)
-  #tmp <- as.numeric(xx %*% beta)
-  St <- exp(-lam*tt)
-  ft <- lam*exp(-lam*tt)
-  Ft <- 1-St
-  out <- data.frame(St = St, Ft = Ft, ft = ft)
-  return(out)
-}
-
-
-dClayton <- function(u1, u2, rho){
-  res <- (1+rho)*(u1*u2)^(-rho-1)*(u1^(-rho) + u2^(-rho)-1)^(-1/rho-2)
-  return(res)
-}
-pClayton <- function(u1, u2, rho){
-  res <- (u1^(-rho) + u2^(-rho)-1)^(-1/rho)
-  return(res)
-}
-
-hf <- function(u, del, k, mi, rho){
-  term <- rep(0, mi)
-  for(j in 1:mi){
-    term[j] <- u[j]^(-rho)
-  }
-  if(k>1) {
-    term1=1
-    for(j in 1:(k-1)) {tmp <- (1+j*rho);
-    term1 = term1*tmp}
-  } else {
-    term1=1}
-
-  term2 <- rep(0, ncol=mi)
-  for(j in 1:mi){
-    term2[j] <- u[j]^(del[j])
-  }
-  res = term1*(prod(term2))^(-rho-1)*(sum(term)-mi+1)^(-1/rho-k)
-  return(res)
-}
-
-h1 <- function(u0, u1, rho){
-
-
-  res = u0^(-rho-1)*(u1^(-rho) + u0^(-rho) -1) ^(-1/rho-1)
-  return(res)
-}
-
-ff <- function(u1, u2, j1, j2, lam01, n.rho, rho, cut, LAM03, LAM12, T0, A1) {
-  dClayton(h1(pexp(T0, rate=lam01, lower.tail=F), pexp(u1, rate=lam01, lower.tail=F), rho=rho) , h1(pexp(T0, rate=lam01, lower.tail=F), pexp(u2, rate=lam01, lower.tail=F), rho=rho),  n.rho)*dClayton(pexp(T0, rate=lam01, lower.tail=F), pexp(u1, rate=lam01, lower.tail=F), rho)*dClayton(pexp(T0, rate=lam01, lower.tail=F), pexp(u2, rate=lam01, lower.tail=F), rho)*dexp(u1, rate=lam01)*dexp(u2, rate=lam01)*ppch(u1, levels=LAM03[[j1+1]], cuts=cut[[j1+1]][-1], lower.tail=F)*ppch(A1[j1], levels=LAM12[[j1+1]], cuts=cut[[j1+1]][-1], lower.tail=F)/ppch(u1, levels=LAM12[[j1+1]], cuts=cut[[j1+1]][-1], lower.tail=F)*ppch(u2, levels=LAM03[[j2+1]], cuts=cut[[j2+1]][-1], lower.tail=F)*ppch(A1[j2], levels=LAM12[[j2+1]], cuts=cut[[j2+1]][-1], lower.tail=F)/ppch(u2, levels=LAM12[[j2+1]], cuts=cut[[j2+1]][-1], lower.tail=F)
-}
 
 
 #==================================================
@@ -249,7 +193,7 @@ generate_cur <- function(id, B0, lam01, lam12, lam03, sen){
 
 
 
-  res <- data.frame(id=id, B=B0, X=multX, Y=multY, del1=multdel1, del2=multdel2,  del3=multdel3 )
+  res <- data.frame(id=id, B=B0, X=multX, Y=multY, del1=multdel1, del2=multdel2,  del3=multdel3)
   return(res)
 }
 
