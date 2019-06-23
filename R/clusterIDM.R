@@ -138,6 +138,7 @@ score_r <- matrix(0, nrow=nr, ncol=2)
 if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
 else{
   for(i in 1:nr){
+    print(i)
     score_r[i,] <- numDeriv::grad(NloglikR_pch, x=pairle$par[-1],  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f)
 
   }
