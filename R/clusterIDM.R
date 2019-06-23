@@ -134,10 +134,12 @@ if(design == 1){
 print(Y.R[438,])
 print(data.R[438,])
 print(numDeriv::grad(NloglikR_pch, x=pairle$par[-1],  cut_F = cut, Y_R = as.matrix(Y.R[438,]), X_R = as.matrix(data.R[438,]), fgau = gauleg.f))
-if(!is.null(outdata.S)) {
+
 if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
 else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par[-1],  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f))
-  if(!is.null(outdata.S)) {
+
+
+if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
   score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS_pch, x=pairle$par[-1],  outdata_S = as.matrix(outdata.S[i,]), fgau = gauleg.f))
   }else{
