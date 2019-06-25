@@ -18,7 +18,7 @@
 generate_con <- function(id, mi, lam01, lam12, lam03, ktau, proband, sen, u0) {
 
   Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
-  Cal = seq(1920, 2011, by=5)
+  Cal = seq(1890, 2015, by=5)
 
   rho <- iTau(claytonCopula(), ktau)
   C2 <- claytonCopula(rho, dim = mi)
@@ -112,7 +112,7 @@ generate_mar <- function(id, B0, R0, lam01, lam12, lam03, sen){
   }
   multT <- qexp(v, rate=u*lam01, lower.tail=F)
   Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
-  Cal = seq(1920, 2011, by=5)
+  Cal = seq(1890, 2015, by=5)
 
   C.B0 = B0 + Age
   C = sort(c(Cal, C.B0))
@@ -165,7 +165,7 @@ generate_cur <- function(id, B0, lam01, lam12, lam03, sen){
 
   multT <- qexp(v, rate=u*lam01, lower.tail=F)
   Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
-  Cal = seq(1920, 2011, by=5)
+  Cal = seq(1890, 2015, by=5)
   C.B0 = B0 + Age
   C = sort(c(Cal, C.B0))
 
