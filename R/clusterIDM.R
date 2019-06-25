@@ -126,37 +126,28 @@ if(design == 1){
 
 
   }else {
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = as.matrix(Y.proband[i,]), X_proband = as.matrix(data.proband[i,]),
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = t(as.matrix(Y.proband[i,])), X_proband = t(as.matrix(data.proband[i,])),
                                                        Age = Age, Cal = Cal, cut_F = cut, lam03 = lam03, fgau = gauleg.f, combn = utils::combn))
 
   }
   }
-print(as.matrix(Y.R[127,]))
-print(as.matrix(data.R[127,]))
-print(numDeriv::grad(NloglikR_pch, x=pairle$par[-1],  cut_F = cut, Y_R = as.matrix(Y.R[127,]), X_R = as.matrix(data.R[127,]), fgau = gauleg.f))
 score_r <- matrix(0, nrow=nr, ncol=2)
-if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
-else{
-  for(i in 1:nr){
-    print(i)
-    score_r[i,] <- numDeriv::grad(NloglikR_pch, x=pairle$par[-1],  cut_F = cut, Y_R = as.matrix(Y.R[i,]), X_R = as.matrix(data.R[i,]), fgau = gauleg.f)
+if(no.death == FALSE) score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
+else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), fgau = gauleg.f)
 
-  }
-}
 
 if(!is.null(outdata.S)) {
   if(no.death == TRUE) {
-  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS_pch, x=pairle$par[-1],  outdata_S = as.matrix(outdata.S[i,]), fgau = gauleg.f))
+  score_s <- sapply(1:ns, function(i) numDeriv::grad(NloglikS_pch, x=pairle$par,  outdata_S = t(as.matrix(outdata.S[i,])), fgau = gauleg.f))
   }else{
-    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut_F = cut, Y_S = as.matrix(Y.S[i,]) ,LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
+    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut_F = cut, Y_S = t(as.matrix(Y.S[i,])) ,LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
   }
 }
 B <- score_i%*%t(score_i)
-if(no.death == FALSE)  B <- B + score_r%*%t(score_r)
-else B[3,3] <- B[3,3] + score_r%*%t(score_r)
+B <- B + score_r%*%t(score_r)
+
 if(!is.null(outdata.S)){
-  if(no.death == TRUE) B[3,3] <- B[3,3] +  score_s%*%t(score_s)
-  else B <- B +  score_s%*%t(score_s)
+   B <- B +  score_s%*%t(score_s)
 }
 
 A <- pairle$hessian
