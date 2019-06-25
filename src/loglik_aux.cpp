@@ -63,7 +63,10 @@ double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, N
     NumericVector w = gauss_quad(_,1);
 
     auxtmp1 += log(dpc(X, lam01, cut_F, 0.0)) -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)));
+
   }
+  Rcout<<lam01<<"\n";
+  Rcout<<auxtmp1<<"\n";
 
   return(auxtmp1);
 
