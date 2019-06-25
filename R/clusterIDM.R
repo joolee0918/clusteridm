@@ -68,14 +68,14 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   LAM03.S <- cut.S <- NULL
   if(!is.null(outdata.S)){
   ns <- nrow(outdata.S)
-  C.B0 <- lapply(1:nr, function(i) data.S[i, birth]+ Age)
-  C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
+  C.B0 <- lapply(1:ns, function(i) data.S[i, birth]+ Age)
+  C <- lapply(1:ns, function(i) sort(c(Cal, C.B0[[i]])))
 
-  Cf.F <- lapply(1:nr, function(i) unique(C[[i]][data.S[i, birth] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, birth]]))
-  Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - data.S[i, birth])
+  Cf.F <- lapply(1:ns, function(i) unique(C[[i]][data.S[i, birth] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, birth]]))
+  Af.F <- lapply(1:ns, function(i) Cf.F[[i]] - data.S[i, birth])
 
-  R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
-  A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+  R.f <- lapply(1:ns, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
+  A.f <- lapply(1:ns, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
 
   LAM03.S <-  lapply(1:ns, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
   cut.S <- lapply(1:ns, function(j) Af.F[[j]][-1])
