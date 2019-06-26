@@ -112,7 +112,7 @@ if(design == 1){
 
   }else {
 
-    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1_pch,  x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
+    score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD1_pch,  cut = cut, x=pairle$par, outdata_F = outdata.F0[i], outdata_proband=outdata.proband[i,first.visit.age.R],
                                                        Age = Age, Cal = Cal, lam03 = lam03, full = full,
                                                       fgau = gauleg.f, combn = utils::combn))
 
