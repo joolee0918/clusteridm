@@ -8,7 +8,7 @@
 #'
 #' @export
 clusterIDM <- function(fam.formula, R.formula, S.formula,
-                       outdata.fam, outdata.R, outdata.S = NULL,
+                       outdata.fam, outdata.proband, outdata.R, outdata.S = NULL,
                        fam.id, fam.rel, recruit.age.fam,
                        first.visit.age.R, R.id, recruit.age.S =NULL,
                        birth, cut=0, lam03, Age = NULL, Cal = NULL, design, full = FALSE, no.death = FALSE, init = NULL){
@@ -16,10 +16,12 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
   new.R.formula <- update.formula(R.formula,  paste("~.+", paste(first.visit.age.R, birth, sep="+")))
 
-  #outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
-  #outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
-  outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
-  outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
+  outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
+  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
+  outdata.proband[, birth] <- lubridate::year(outdata.proband[, birth]) + lubridate::yday(outdata.proband[,birth])/365
+
+  #outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
+  #outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
 
   m.fam <- model.frame(new.fam.formula, data = outdata.fam)
   m.proband <- model.frame(new.R.formula, data = outdata.proband)
