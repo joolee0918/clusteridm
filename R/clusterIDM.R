@@ -4,7 +4,7 @@
 #' @importFrom msm dpexp ppexp
 #' @importFrom utils combn
 #' @importFrom eha ppch
-#' @importFrom lubridate ymd ydate year
+#' @importFrom lubridate ymd yday year
 #'
 #' @export
 clusterIDM <- function(fam.formula, R.formula, S.formula,
