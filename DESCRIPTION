@@ -14,5 +14,5 @@ LazyData: true
 LinkingTo: 
     Rcpp
 Imports: 
-    Rcpp, survival, timereg, copula, msm, numDeriv, combinat
+    Rcpp, survival, timereg, copula, msm, numDeriv, combinat, lubridate
 RoxygenNote: 6.1.1

@@ -91,8 +91,8 @@ X.fam<- split(as.data.frame(data.fam), as.factor(data.fam[, "fid"]))
 outdata.F0 <- split(outdata.fam, as.factor(outdata.fam[, fam.id]))
 
 if(is.null(init)){
-  if(no.death == TRUE) par <- c(rho, log(lam01))
-  else par<- c( rho, log(theta), log(lam01))
+  if(no.death == TRUE) par <- c(1, log(0.1))
+  else par<- c(1, log(1.2), log(0.1))
 
 }else{
   par <- init
