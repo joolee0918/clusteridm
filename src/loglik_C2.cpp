@@ -722,7 +722,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
        NumericVector IG1 = NumericVector::create(IG[0], 0, 0);
        NumericVector IG2 = NumericVector::create(IG[0], 0, 1);
-       NumericVector IG3 = NumericVector::create(IG[0], 1, 1);
+       NumericVector IG3 = NumericVector::create(IG[0], 1, 0);
        NumericVector IG4 = NumericVector::create(IG[0], 1, 1);
 
        NumericVector SS1 = NumericVector::create(SAg0[j1-1], SAg0[j2-1]);
@@ -757,7 +757,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
                  + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03[0], cut[0], 0.0, 0.0)*ppc(C0, LAM12[0], cut[0],  0.0, 0.0)/vppc(u, LAM12[0], cut[0], 0.0, 0.0))*(1-pow(1-p,2)));
     tmp9 += log(pg0);
 
-    rr += tmp1 + tmp2 + tmp3 + tmp5 + tmp6 + tmp7 + tmp8;
+    rr += tmp1 + tmp2 + tmp3 + tmp5 + tmp6 + tmp7 + tmp8 + tmp9;
   }
 
   return(rr);
