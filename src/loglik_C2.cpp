@@ -277,7 +277,7 @@ double loglikFD2_pch(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_pro
   double tmp1=0, tmp2=0, tmp3=0, tmp5=0, tmp6 = 0, tmp7=0, tmp8=0;
   double rr=0;
 
-  NumericVector pC0 = X_proband(_, 0);
+  NumericVector pC0 = X_proband(_, 1);
   IntegerVector lam03_Y = lam03["Year.f"];
   IntegerVector lam03_A = lam03["Age.f"];
   NumericVector lam03_rate = lam03["rate"];
@@ -509,7 +509,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
   double rr=0;
   double pg0;
 
-  NumericVector pC0 = X_proband(_, 0);
+  NumericVector pC0 = X_proband(_, 1);
   IntegerVector lam03_Y = lam03["Year.f"];
   IntegerVector lam03_A = lam03["Age.f"];
   NumericVector lam03_rate = lam03["rate"];
@@ -528,6 +528,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
   //#pragma omp parallel for private(i, j, l, k, gauss_quad, u, u1, u2, w, w1, w2, sq, rep1, rep2, uu1, uu2, ww1, ww2, tmp1, tmp2, tmp3, tmp5, tmp7, tmp8) num_threads(4) reduction(+: rr)
   for(i=0; i<nf; i++){
+    Rcout<<i<<"\n";
     tmp1 = tmp2 = tmp3 = tmp5 = tmp6 = tmp7 = tmp8 = tmp9 = 0;
 
     NumericMatrix data_Y = as<NumericMatrix>(Y_F[i]);
@@ -563,6 +564,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     }
 
     C0 = pC0[i];
+
 
     List LAM03(nr), LAM12(nr), cut(nr);
     NumericVector cc(ncal + nage);
@@ -603,6 +605,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     }
 
     if(nr==2){
+      Rcout<<"two"<<"\n";
 
       NumericVector S0(2);
       S0[0] = ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0);
@@ -637,6 +640,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
 
     }else{
+      Rcout<<"three"<<"\n";
       pair_nr = (nr-1)*(nr-2)/2;
       NumericMatrix comb(2, pair_nr);
       comb = as<NumericMatrix>(combn(nr-1, 2));
@@ -660,9 +664,9 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
         Sf(j-1, 1)  = ppc(X[j], lam01*exp(alpha*IG[j]), cut_F, 0.0, 0.0);
         SAf(j-1, 1)  = ppc(exam_age[j], lam01*exp(alpha*IG[j]), cut_F, 0.0, 0.0);
         Sc[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(X[j], lam01*exp(alpha*IG[j]), cut_F, 0.0, 0.0), rho);
-        SAc[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j]*exp(alpha*IG[j]), lam01, cut_F, 0.0, 0.0), rho);
-        SAg0[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j]*exp(alpha*0), lam01, cut_F, 0.0, 0.0), rho);
-        SAg1[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j]*exp(alpha*1), lam01, cut_F, 0.0, 0.0), rho);
+        SAc[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j], lam01*exp(alpha*IG[j]), cut_F, 0.0, 0.0), rho);
+        SAg0[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j], lam01*exp(alpha*0), cut_F, 0.0, 0.0), rho);
+        SAg1[j-1]  = h1(ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0), ppc(exam_age[j], lam01*exp(alpha*1), cut_F, 0.0, 0.0), rho);
 
       }
 
@@ -729,10 +733,10 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
        NumericVector rel = fam_rel(j,_);
 
 
-      tmp8 -= log(ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03[j1], cut1, LAM12[j1], cut2, IG1,  SS1, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03[j1], cut1, LAM12[j1], cut2, IG2,  SS2, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03[j1], cut1, LAM12[j2], cut2, IG3,  SS3, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03[j1], cut1, LAM12[j2], cut2, IG4,  SS4, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2))/(nr-2);
+      tmp8 -= log(ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03,  LAM12, cut1, cut2, IG1,  SS1, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG2,  SS2, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG3,  SS3, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG4,  SS4, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2))/(nr-2);
 
       }
 

@@ -347,7 +347,7 @@ double pG(NumericVector r_id, NumericVector G, double p){
 
 double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
            NumericVector lam01, double newrho, double rho, NumericVector exam_age, NumericVector cut_F,
-           NumericVector LAM03, NumericVector cut1, NumericVector LAM12, NumericVector cut2, NumericVector IG,
+           List LAM03,  List LAM12, NumericVector cut1, NumericVector cut2, NumericVector IG,
            NumericVector SS, NumericVector rid, double pg0, double p, NumericVector w1,  NumericVector w2,
            NumericVector u1,  NumericVector u2,  NumericVector ww1,  NumericVector ww2,  NumericVector uu1,  NumericVector uu2) {
 
