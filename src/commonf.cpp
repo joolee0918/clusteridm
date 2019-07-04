@@ -1,4 +1,6 @@
-#include <Rcpp.h>
+
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
@@ -276,14 +278,24 @@ NumericVector vdpc(NumericVector x, NumericVector levels,  NumericVector cuts, i
   return(y);
 }
 
+//[[Rcpp::export()]]
+NumericVector order_cpp(NumericVector x){
+  match(x, clone(x).sort());
+  return(x);
+}
 
-
-double pG0(NumericVector r_id, NumericVector G, double p){
+//[[Rcpp::export()]]
+double pG0(arma::vec r_id, NumericVector G, double p){
   double q;
   double res = 0;
+
   q=1-p;
-  r_id.sort();
-  G = G[r_id];
+  //NumericVector order_id = match(r_id, clone(r_id).sort());
+  arma::uvec order_rid = sort_index(r_id);
+  NumericVector order_rid2 = as<NumericVector> (wrap(order_rid));
+
+  G = G[order_rid2];
+
   if(sum(r_id)==2){
     if(G[0]==1 & G[1] ==1 ) res = pow(1-pow(q,2), 2);
     else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = (1-pow(q,2))*pow(q,2);
@@ -295,24 +307,25 @@ double pG0(NumericVector r_id, NumericVector G, double p){
       else res = pow(q,3);
 
   } else if(sum(r_id)==4){
-    if(G[0]==1 & G[1] ==1 ) res = 1/4*pow(p,2)*pow(1+p,2) + p*q*(2*p+1);
-      else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2)*(1+q);
-        else res = 1/4*pow(q,2)*pow(1+q,2);
+    if(G[0]==1 & G[1] ==1 ) res = 1.0/4.0*pow(p,2)*pow(1+p,2) + p*q*(2*p+1);
+      else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = 1.0/4.0*pow(p,2)*pow(q,2) + 1.0/2.0*p*pow(q,2)*(1+q);
+        else res = 1.0/4.0*pow(q,2)*pow(1+q,2);
   }
 
   return(res);
 
 }
 
-
-double pG(NumericVector r_id, NumericVector G, double p){
+//[[Rcpp::export()]]
+double pG(arma::vec r_id, NumericVector G, double p){
   double q;
   double res = 0;
   q=1-p;
-  r_id.sort();
-  G = G[r_id];
 
-  if(sum(r_id) == 4){
+  arma::uvec order_rid = sort_index(r_id);
+  NumericVector order_rid2 = as<NumericVector> (wrap(order_rid));
+  G = G[order_rid2];
+   if(sum(r_id) == 4){
     if(G[0]==1 & G[1] ==1 & G[2]==1) res = pow(p,2)*(1+2*q);
       else if(G[0]==1 & G[1]==1 & G[2]==0) res = pow(p,2)*pow(q,2);
       else if(G[0]==1 & G[1]==0 & G[2]==1) res = p*pow(q,2);
@@ -322,23 +335,23 @@ double pG(NumericVector r_id, NumericVector G, double p){
       else if(G[0]==0 & G[1]==0 & G[2]==1) res = 0;
       else if(G[0]==0 & G[1]==0 & G[2]==0) res = pow(q,4);
   } else if(sum(r_id)==5){
-    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1/4*pow(p,2)*(1+p)*(5-3*p) + 1/2*p*q*(p+p*q+1);
-      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
-      else if(G[0]==1 & G[1]==0 & G[2]==1) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
-      else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1/4*p*pow(q,2)*(1+q);
-        else if(G[0]==0 & G[1]==1 & G[2]==1) res = 1/2*p*pow(q,2)*(1+p);
-          else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1/2*p*pow(q,3);
-          else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1/2*p*pow(q,3);
-          else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1/2*pow(q,3)*(1+q);
+    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1.0/4.0*pow(p,2)*(1+p)*(5-3*p) + 1/2*p*q*(p+p*q+1);
+      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 1.0/4.0*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==1) res = 1.0/4.0*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1.0/4.0*p*pow(q,2)*(1+q);
+       else if(G[0]==0 & G[1]==1 & G[2]==1) res = 1.0/2.0*p*pow(q,2)*(1+p);
+          else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1.0/2.0*p*pow(q,3);
+          else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1.0/2.0*p*pow(q,3);
+          else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1.0/2.0*pow(q,3)*(1+q);
   } else if(sum(r_id)==6){
-    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1/16*pow(p,2)*(1+3*p)*(7-3*p) + 1/4*p*q*(6*p + 3*p*q+2);
-      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
-        else if(G[0]==1 & G[1]==0 & G[2]==1) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
-          else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
-            else if(G[0]==0 & G[1]==1 & G[2]==1) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
-              else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
-                else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
-                  else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1/16*pow(q,2)*pow(1+3*q,2);
+    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1.0/16.0*pow(p,2)*(1+3*p)*(7-3*p) + 1.0/4.0*p*q*(6*p + 3*p*q+2);
+      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 5.0/16.0*pow(p,2)*pow(q,2) + 1.0/4.0*p*pow(q,2)*(1+q);
+        else if(G[0]==1 & G[1]==0 & G[2]==1) res = 5.0/16.0*pow(p,2)*pow(q,2) + 1.0/4.0*p*pow(q,2)*(1+q);
+          else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1.0/16.0*pow(p,2)*pow(q,2) + 1.0/8.0*p*pow(q,2)*(1+3*q);
+            else if(G[0]==0 & G[1]==1 & G[2]==1) res = 5.0/16.0*pow(p,2)*pow(q,2) + 1.0/4.0*p*pow(q,2)*(1+q);
+              else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1.0/16.0*pow(p,2)*pow(q,2) + 1.0/8.0*p*pow(q,2)*(1+3*q);
+                else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1.0/16.0*pow(p,2)*pow(q,2) + 1.0/8.0*p*pow(q,2)*(1+3*q);
+                  else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1.0/16.0*pow(q,2)*pow(1+3*q,2);
   }
   return(res);
 }
@@ -348,7 +361,7 @@ double pG(NumericVector r_id, NumericVector G, double p){
 double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
            NumericVector lam01, double newrho, double rho, NumericVector exam_age, NumericVector cut_F,
            List LAM03,  List LAM12, NumericVector cut1, NumericVector cut2, NumericVector IG,
-           NumericVector SS, NumericVector rid, double pg0, double p, NumericVector w1,  NumericVector w2,
+           NumericVector SS, arma::vec rid, double pg0, double p, NumericVector w1,  NumericVector w2,
            NumericVector u1,  NumericVector u2,  NumericVector ww1,  NumericVector ww2,  NumericVector uu1,  NumericVector uu2) {
 
   double res;
@@ -367,4 +380,7 @@ double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
 
   return(res);
 }
+
+
+
 

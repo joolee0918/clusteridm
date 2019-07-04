@@ -1,3 +1,6 @@
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
 #include <Rcpp.h>
 #include <stdio.h>
 #include <math.h>
@@ -494,9 +497,11 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
   double theta = exp(par[1]);
   double rho = par[0];
   double newrho = rho/(1+rho);
-  double alpha = exp(par[2]);
+  double alpha = par[2];
   double p = exp(par[3]);
   NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
+
+  Rcout<<alpha<<"\n";
 
   int i, j, j1, j2, k, l, nr, pair_nr;
   int nf = Y_F.size();
@@ -528,7 +533,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
   //#pragma omp parallel for private(i, j, l, k, gauss_quad, u, u1, u2, w, w1, w2, sq, rep1, rep2, uu1, uu2, ww1, ww2, tmp1, tmp2, tmp3, tmp5, tmp7, tmp8) num_threads(4) reduction(+: rr)
   for(i=0; i<nf; i++){
-    Rcout<<i<<"\n";
+
     tmp1 = tmp2 = tmp3 = tmp5 = tmp6 = tmp7 = tmp8 = tmp9 = 0;
 
     NumericMatrix data_Y = as<NumericMatrix>(Y_F[i]);
@@ -541,7 +546,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     NumericVector X(nr);
     NumericVector Y(nr);
     NumericVector IG(nr);
-    NumericVector rid(nr);
+    arma::vec rid(nr);
     NumericVector exam_age(nr);
     IntegerVector del1(nr);
     IntegerVector del2(nr);
@@ -556,7 +561,8 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     del3 = Y_proband(i,2);
 
     IG = data_X["G"];
-    rid = data_X["rel.id"];
+
+    rid = as<arma::vec>(data_X["rel.id"]);
     if(IG[0]==0){
       pg0 = pow((1-p),2);
     }else{
@@ -604,14 +610,18 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
     }
 
+    double px = ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0);
+    NumericVector tmpS1(2), tmpS2(2);
+
     if(nr==2){
-      Rcout<<"two"<<"\n";
+
 
       NumericVector S0(2);
       S0[0] = ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0);
       S0[1] = ppc(X[1], lam01*exp(alpha*IG[1]), cut_F, 0.0, 0.0);
       if(sum(del2)==2) tmp1 += dClayton(S0, rho, 1.0);
       else tmp1 += log(hf(S0, del2, 1, 2, rho));
+
       tmp1 +=  log(pG0(rid, IG, p) / pg0);
 
       IntegerVector tmpdel = IntegerVector::create(1,0);
@@ -623,9 +633,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
       u = gauss_quad(_,0);
       w = gauss_quad(_,1);
 
-      double px = ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0);
       NumericVector vpx = rep(px, 20);
-      NumericVector tmpS1(2), tmpS2(2);
       tmpS1[0] = tmpS2[0] = px;
       tmpS1[1] = ppc(tmp[1], lam01*exp(alpha*0), cut_F, 0.0, 0.0);
       tmpS2[1] = ppc(tmp[1], lam01*exp(alpha*1), cut_F, 0.0, 0.0);
@@ -640,7 +648,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
 
     }else{
-      Rcout<<"three"<<"\n";
+
       pair_nr = (nr-1)*(nr-2)/2;
       NumericMatrix comb(2, pair_nr);
       comb = as<NumericMatrix>(combn(nr-1, 2));
@@ -654,7 +662,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
       NumericMatrix S(pair_nr, 2);
       NumericMatrix SA(pair_nr, 2);
       IntegerMatrix fam_del2(pair_nr, 2);
-      NumericMatrix fam_rel(pair_nr, 3);
+      arma::vec fam_rel(3);
       NumericMatrix fam_IG(pair_nr, 3);
 
 
@@ -670,16 +678,23 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
 
       }
 
+      NumericVector vpx = rep(px, 20);
+      NumericVector vpx2 = rep(px, 20*20);
+
+
+
       for(j=0; j<pair_nr; j++){
-        fam_rel(j, 0) = rid[0];
+
+        fam_rel[0] = rid[0];
         fam_IG(j, 0) = IG[0];
         for(k=0; k<2; k++){
           S(j,k) =  Sc[comb(k,j)-1];
           SA(j,k) =  SAc[comb(k,j)-1];
           fam_del2(j, k) = del2[comb(k,j)];
-          fam_rel(j, k+1) = rid[comb(k,j)];
+          fam_rel[k+1] = rid[comb(k,j)];
           fam_IG(j, k+1) = IG[comb(k,j)];
         }
+
 
         if (sum(fam_del2(j,_))==2) {
           tmp11 = dClayton(S(j,_),  newrho, 1.0) + dClayton(Sf(comb(0,j)-1,_), rho, 1.0) + dClayton(Sf(comb(1,j)-1,_), rho, 1.0);
@@ -688,18 +703,8 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
         } else {
           tmp11 =  log(pClayton(S(j,_), newrho));
         }
-        tmp1 += tmp11/(nr-2) + log(pG(fam_rel(j,_), fam_IG(j,_), p) / pg0)/(nr-2) ;
+        tmp1 += tmp11/(nr-2) + log(pG(fam_rel, fam_IG(j,_), p) / pg0)/(nr-2) ;
 
-      }
-
-
-
-      double px = ppc(X[0], lam01*exp(alpha*IG[0]), cut_F, 0.0, 0.0);
-      NumericVector vpx = rep(px, 20);
-      NumericVector vpx2 = rep(px, 20*20);
-
-
-      for(j=0; j<pair_nr; j++){
         j1 = comb(0,j);
         j2 = comb(1,j);
         NumericVector cut1 = cut[j1];
@@ -730,15 +735,14 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
        NumericVector SS3 = NumericVector::create(SAg1[j1-1], SAg0[j2-1]);
        NumericVector SS4 = NumericVector::create(SAg1[j1-1], SAg1[j2-1]);
 
-       NumericVector rel = fam_rel(j,_);
 
-
-      tmp8 -= log(ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03,  LAM12, cut1, cut2, IG1,  SS1, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG2,  SS2, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG3,  SS3, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
-                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG4,  SS4, rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2))/(nr-2);
+      tmp8 -= log(ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03,  LAM12, cut1, cut2, IG1,  SS1, fam_rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG2,  SS2, fam_rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG3,  SS3, fam_rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2)
+                    + ff1(j1, j2, vpx,vpx2, alpha, lam01, newrho, rho, exam_age,cut_F, LAM03, LAM12, cut1, cut2, IG4,  SS4, fam_rel, pg0, p, w1, w2, u1, u2, ww1, ww2, uu1, uu2))/(nr-2);
 
       }
+
 
     }
 
@@ -758,6 +762,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     tmp9 += log(pg0);
 
     rr += tmp1 + tmp2 + tmp3 + tmp5 + tmp6 + tmp7 + tmp8 + tmp9;
+
   }
 
   return(rr);

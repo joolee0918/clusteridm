@@ -1,13 +1,12 @@
 #ifndef COMMONF_H
 #define COMMONF_H
 
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
 #include <Rmath.h>
 #include <iostream>
-
 
 using namespace Rcpp;
 
@@ -27,12 +26,12 @@ double ppc(double q, NumericVector levels, NumericVector cuts, int lower, int lo
 double dpc(double x, NumericVector levels, NumericVector cuts, int logf);
 NumericVector vppc(NumericVector q, NumericVector levels, NumericVector cuts, int lower, int logf);
 NumericVector vdpc(NumericVector x, NumericVector levels, NumericVector cuts, int logf);
-double pG0(NumericVector r_id, NumericVector G, double p);
-double pG(NumericVector r_id, NumericVector G, double p);
+double pG0(arma::vec r_id, NumericVector G, double p);
+double pG(arma::vec r_id, NumericVector G, double p);
 double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
            NumericVector lam01, double newrho, double rho, NumericVector exam_age, NumericVector cut_F,
            List LAM03, List LAM12, NumericVector cut1, NumericVector cut2, NumericVector IG,
-           NumericVector SS, NumericVector rid, double pg0, double p, NumericVector w1,  NumericVector w2,
+           NumericVector SS, arma::vec rid, double pg0, double p, NumericVector w1,  NumericVector w2,
            NumericVector u1,  NumericVector u2,  NumericVector ww1,  NumericVector ww2,  NumericVector uu1,  NumericVector uu2);
 #endif
 

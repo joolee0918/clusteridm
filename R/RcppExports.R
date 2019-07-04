@@ -33,6 +33,18 @@ vdpc <- function(x, levels, cuts, logf) {
     .Call(`_clusteridm_vdpc`, x, levels, cuts, logf)
 }
 
+order_cpp <- function(x) {
+    .Call(`_clusteridm_order_cpp`, x)
+}
+
+pG0 <- function(r_id, G, p) {
+    .Call(`_clusteridm_pG0`, r_id, G, p)
+}
+
+pG <- function(r_id, G, p) {
+    .Call(`_clusteridm_pG`, r_id, G, p)
+}
+
 loglikFD1 <- function(par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn) {
     .Call(`_clusteridm_loglikFD1`, par, outdata_F, outdata_proband, Age, Cal, lam03, full, fgau, fdpexp, fppexp, combn)
 }
@@ -77,8 +89,8 @@ loglikS_pch <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
     .Call(`_clusteridm_loglikS_pch`, par, cut_F, Y_S, LAM03S, cutS, fgau)
 }
 
-loglikS_pch_gene <- function(par, cut_F, Y_S, IG_S, LAM03S, cutS, fgau) {
-    .Call(`_clusteridm_loglikS_pch_gene`, par, cut_F, Y_S, IG_S, LAM03S, cutS, fgau)
+loglikS_pch_gene <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
+    .Call(`_clusteridm_loglikS_pch_gene`, par, cut_F, Y_S, LAM03S, cutS, fgau)
 }
 
 NloglikS_pch <- function(par, cut_F, Y_S, fgau) {

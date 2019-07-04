@@ -40,7 +40,7 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
   }
   res = res + auxtmp1 + auxtmp2
 
-  print(c(c(par[1], par[2], exp(par[-c(1:2)])), res))
+  print(c(c(par[1], exp(par[2]), par[3], exp(par[-c(1:3)])), res))
 
   return(-res)
 }

@@ -1,3 +1,5 @@
+// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <stdio.h>
 #include <math.h>
@@ -110,7 +112,7 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
   int i;
   double pg0R;
   double theta = exp(par[1]);
-  double alpha = exp(par[2]);
+  double alpha = par[2];
   double p = exp(par[3]);
   NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
 
@@ -146,11 +148,12 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
         auxtmp1 += (log(dpc(X, lam01, cut_F, 0.0)*ppc(X, LAM03_R, cut_R,  0.0, 0.0)*dpc(Y, LAM12_R, cut_R, 0.0)/ppc(X, LAM12_R, cut_R,  0.0, 0.0)*pow((1-p),2)
                         + dpc(X, lam01*exp(alpha), cut_F, 0.0)*ppc(X, LAM03_R, cut_R,  0.0, 0.0)*dpc(Y, LAM12_R, cut_R, 0.0)/ppc(X, LAM12_R, cut_R,  0.0, 0.0)*(1-pow((1-p),2)))
                       -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)
-                          + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)));
+                          + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
+
       } else{
         auxtmp1 += (log(dpc(X, lam01*exp(alpha*IG), cut_F, 0.0)*ppc(X, LAM03_R, cut_R,  0.0, 0.0)*dpc(Y, LAM12_R, cut_R, 0.0)/ppc(X, LAM12_R, cut_R,  0.0, 0.0))
                       + log(pg0R)  -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)
-                      + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)));
+                      + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
 
       }
     }else{
@@ -158,12 +161,12 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
           auxtmp1 += (log(dpc(X, lam01, cut_F, 0.0)*ppc(X, LAM03_R, cut_R, 0.0,  0.0)*ppc(Y, LAM12_R, cut_R, 0.0, 0.0)/ppc(X, LAM12_R, cut_R, 0.0, 0.0)*pow((1-p),2)
                             + dpc(X, lam01*exp(alpha), cut_F, 0.0)*ppc(X, LAM03_R, cut_R, 0.0,  0.0)*ppc(Y, LAM12_R, cut_R, 0.0, 0.0)/ppc(X, LAM12_R, cut_R, 0.0, 0.0)*(1-pow((1-p),2)))
                         -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)
-                        + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)));
+                        + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
 
         } else{
          auxtmp1 += (log(dpc(X, lam01*exp(alpha*IG), cut_F, 0.0)*ppc(X, LAM03_R, cut_R, 0.0,  0.0)*ppc(Y, LAM12_R, cut_R, 0.0, 0.0)/ppc(X, LAM12_R, cut_R, 0.0, 0.0))
                        + log(pg0R) -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)
-                        + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)));
+                        + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
 
       }
       }
@@ -244,11 +247,11 @@ double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, 
 
 
 //[[Rcpp::export()]]
-double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, NumericVector IG_S,  List LAM03S, List cutS, Function fgau){
+double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List cutS, Function fgau){
 
   int i;
   double theta = exp(par[1]);
-  double alpha = exp(par[2]);
+  double alpha = par[2];
   double p = exp(par[3]);
   NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
 

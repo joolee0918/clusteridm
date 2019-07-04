@@ -40,11 +40,13 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   colnames(data.proband) <- c("id", "exam.age", "B")
   colnames(data.R) <- c("id", "exam.age", "B")
   if(!is.null(G)){
-    data.R <- merge(data.R, cbind(outdata.R[, c(R.id, G)]), by=R.id)
+    data.R <-merge(data.R, cbind(outdata.R[, c(R.id, G)]), by=R.id)
     names(data.R)[4] <- "G"
-
-    data.proband <- merge(data.proband, cbind(outdata.proband[, c(R.id, G)]), by=R.id)
+    data.R$G <- ifelse(is.na(data.R$G), -999, data.R$G)
+    data.R <- as.matrix(data.R)
+    data.proband <- as.matrix(merge(data.proband, cbind(outdata.proband[, c(R.id, G)]), by=R.id))
     names(data.proband)[4] <- "G"
+
   }
 
   Y.S <- data.S <- NULL
