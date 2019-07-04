@@ -65,8 +65,8 @@ loglikR_pch <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
     .Call(`_clusteridm_loglikR_pch`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
 }
 
-loglikR_pch_gene <- function(par, cut_F, Y_R, X_R, IG_R, LAM03R, cutR, fgau) {
-    .Call(`_clusteridm_loglikR_pch_gene`, par, cut_F, Y_R, X_R, IG_R, LAM03R, cutR, fgau)
+loglikR_pch_gene <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
+    .Call(`_clusteridm_loglikR_pch_gene`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
 }
 
 loglikS <- function(par, outdata_S, LAM03S, cutS, fgau, fdpexp, fppexp) {

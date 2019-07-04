@@ -282,8 +282,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // loglikR_pch_gene
-double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R, NumericVector IG_R, List LAM03R, List cutR, Function fgau);
-RcppExport SEXP _clusteridm_loglikR_pch_gene(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_RSEXP, SEXP X_RSEXP, SEXP IG_RSEXP, SEXP LAM03RSEXP, SEXP cutRSEXP, SEXP fgauSEXP) {
+double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R, List LAM03R, List cutR, Function fgau);
+RcppExport SEXP _clusteridm_loglikR_pch_gene(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_RSEXP, SEXP X_RSEXP, SEXP LAM03RSEXP, SEXP cutRSEXP, SEXP fgauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -291,11 +291,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type cut_F(cut_FSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type Y_R(Y_RSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type X_R(X_RSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type IG_R(IG_RSEXP);
     Rcpp::traits::input_parameter< List >::type LAM03R(LAM03RSEXP);
     Rcpp::traits::input_parameter< List >::type cutR(cutRSEXP);
     Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
-    rcpp_result_gen = Rcpp::wrap(loglikR_pch_gene(par, cut_F, Y_R, X_R, IG_R, LAM03R, cutR, fgau));
+    rcpp_result_gen = Rcpp::wrap(loglikR_pch_gene(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -381,7 +380,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_clusteridm_loglikR", (DL_FUNC) &_clusteridm_loglikR, 7},
     {"_clusteridm_NloglikR_pch", (DL_FUNC) &_clusteridm_NloglikR_pch, 5},
     {"_clusteridm_loglikR_pch", (DL_FUNC) &_clusteridm_loglikR_pch, 7},
-    {"_clusteridm_loglikR_pch_gene", (DL_FUNC) &_clusteridm_loglikR_pch_gene, 8},
+    {"_clusteridm_loglikR_pch_gene", (DL_FUNC) &_clusteridm_loglikR_pch_gene, 7},
     {"_clusteridm_loglikS", (DL_FUNC) &_clusteridm_loglikS, 7},
     {"_clusteridm_loglikS_pch", (DL_FUNC) &_clusteridm_loglikS_pch, 6},
     {"_clusteridm_loglikS_pch_gene", (DL_FUNC) &_clusteridm_loglikS_pch_gene, 7},
