@@ -211,6 +211,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// loglikFD2_pch_gene
+double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F, NumericMatrix Y_proband, NumericMatrix X_proband, NumericVector Age, NumericVector Cal, NumericVector cut_F, DataFrame lam03, Function fgau, Function combn);
+RcppExport SEXP _clusteridm_loglikFD2_pch_gene(SEXP parSEXP, SEXP Y_FSEXP, SEXP X_FSEXP, SEXP Y_probandSEXP, SEXP X_probandSEXP, SEXP AgeSEXP, SEXP CalSEXP, SEXP cut_FSEXP, SEXP lam03SEXP, SEXP fgauSEXP, SEXP combnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type par(parSEXP);
+    Rcpp::traits::input_parameter< List >::type Y_F(Y_FSEXP);
+    Rcpp::traits::input_parameter< List >::type X_F(X_FSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y_proband(Y_probandSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X_proband(X_probandSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type Age(AgeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type Cal(CalSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cut_F(cut_FSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type lam03(lam03SEXP);
+    Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
+    Rcpp::traits::input_parameter< Function >::type combn(combnSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglikFD2_pch_gene(par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn));
+    return rcpp_result_gen;
+END_RCPP
+}
 // loglikR
 double loglikR(DataFrame outdata_R, NumericVector par, List LAM03R, List cutR, Function fgau, Function fdpexp, Function fppexp);
 RcppExport SEXP _clusteridm_loglikR(SEXP outdata_RSEXP, SEXP parSEXP, SEXP LAM03RSEXP, SEXP cutRSEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP) {
@@ -260,6 +281,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// loglikR_pch_gene
+double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R, NumericVector IG_R, List LAM03R, List cutR, Function fgau);
+RcppExport SEXP _clusteridm_loglikR_pch_gene(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_RSEXP, SEXP X_RSEXP, SEXP IG_RSEXP, SEXP LAM03RSEXP, SEXP cutRSEXP, SEXP fgauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type par(parSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cut_F(cut_FSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y_R(Y_RSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X_R(X_RSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type IG_R(IG_RSEXP);
+    Rcpp::traits::input_parameter< List >::type LAM03R(LAM03RSEXP);
+    Rcpp::traits::input_parameter< List >::type cutR(cutRSEXP);
+    Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglikR_pch_gene(par, cut_F, Y_R, X_R, IG_R, LAM03R, cutR, fgau));
+    return rcpp_result_gen;
+END_RCPP
+}
 // loglikS
 double loglikS(NumericVector par, DataFrame outdata_S, List LAM03S, List cutS, Function fgau, Function fdpexp, Function fppexp);
 RcppExport SEXP _clusteridm_loglikS(SEXP parSEXP, SEXP outdata_SSEXP, SEXP LAM03SSEXP, SEXP cutSSEXP, SEXP fgauSEXP, SEXP fdpexpSEXP, SEXP fppexpSEXP) {
@@ -293,6 +332,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// loglikS_pch_gene
+double loglikS_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_S, NumericVector IG_S, List LAM03S, List cutS, Function fgau);
+RcppExport SEXP _clusteridm_loglikS_pch_gene(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_SSEXP, SEXP IG_SSEXP, SEXP LAM03SSEXP, SEXP cutSSEXP, SEXP fgauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type par(parSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cut_F(cut_FSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y_S(Y_SSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type IG_S(IG_SSEXP);
+    Rcpp::traits::input_parameter< List >::type LAM03S(LAM03SSEXP);
+    Rcpp::traits::input_parameter< List >::type cutS(cutSSEXP);
+    Rcpp::traits::input_parameter< Function >::type fgau(fgauSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglikS_pch_gene(par, cut_F, Y_S, IG_S, LAM03S, cutS, fgau));
+    return rcpp_result_gen;
+END_RCPP
+}
 // NloglikS_pch
 double NloglikS_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_S, Function fgau);
 RcppExport SEXP _clusteridm_NloglikS_pch(SEXP parSEXP, SEXP cut_FSEXP, SEXP Y_SSEXP, SEXP fgauSEXP) {
@@ -321,11 +377,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_clusteridm_loglikFD1_pch", (DL_FUNC) &_clusteridm_loglikFD1_pch, 10},
     {"_clusteridm_loglikFD2", (DL_FUNC) &_clusteridm_loglikFD2, 11},
     {"_clusteridm_loglikFD2_pch", (DL_FUNC) &_clusteridm_loglikFD2_pch, 11},
+    {"_clusteridm_loglikFD2_pch_gene", (DL_FUNC) &_clusteridm_loglikFD2_pch_gene, 11},
     {"_clusteridm_loglikR", (DL_FUNC) &_clusteridm_loglikR, 7},
     {"_clusteridm_NloglikR_pch", (DL_FUNC) &_clusteridm_NloglikR_pch, 5},
     {"_clusteridm_loglikR_pch", (DL_FUNC) &_clusteridm_loglikR_pch, 7},
+    {"_clusteridm_loglikR_pch_gene", (DL_FUNC) &_clusteridm_loglikR_pch_gene, 8},
     {"_clusteridm_loglikS", (DL_FUNC) &_clusteridm_loglikS, 7},
     {"_clusteridm_loglikS_pch", (DL_FUNC) &_clusteridm_loglikS_pch, 6},
+    {"_clusteridm_loglikS_pch_gene", (DL_FUNC) &_clusteridm_loglikS_pch_gene, 7},
     {"_clusteridm_NloglikS_pch", (DL_FUNC) &_clusteridm_NloglikS_pch, 4},
     {NULL, NULL, 0}
 };
