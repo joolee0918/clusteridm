@@ -275,3 +275,96 @@ NumericVector vdpc(NumericVector x, NumericVector levels,  NumericVector cuts, i
 
   return(y);
 }
+
+
+
+double pG0(NumericVector r_id, NumericVector G, double p){
+  double q;
+  double res = 0;
+  q=1-p;
+  r_id.sort();
+  G = G[r_id];
+  if(sum(r_id)==2){
+    if(G[0]==1 & G[1] ==1 ) res = pow(1-pow(q,2), 2);
+    else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = (1-pow(q,2))*pow(q,2);
+    else res = pow(q,4);
+
+  } else if(sum(r_id)==3){
+    if(G[0]==1 & G[1] ==1 ) res = pow(p,2)*q+p;
+      else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = p*pow(q,2);
+      else res = pow(q,3);
+
+  } else if(sum(r_id)==4){
+    if(G[0]==1 & G[1] ==1 ) res = 1/4*pow(p,2)*pow(1+p,2) + p*q*(2*p+1);
+      else if((G[0]==1 & G[1] ==0) | (G[0]==0 & G[1] ==1)) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2)*(1+q);
+        else res = 1/4*pow(q,2)*pow(1+q,2);
+  }
+
+  return(res);
+
+}
+
+
+double pG(NumericVector r_id, NumericVector G, double p){
+  double q;
+  double res = 0;
+  q=1-p;
+  r_id.sort();
+  G = G[r_id];
+
+  if(sum(r_id) == 4){
+    if(G[0]==1 & G[1] ==1 & G[2]==1) res = pow(p,2)*(1+2*q);
+      else if(G[0]==1 & G[1]==1 & G[2]==0) res = pow(p,2)*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==1) res = p*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==0) res = p*pow(q,3);
+      else if(G[0]==0 & G[1]==1 & G[2]==1) res = p*pow(q,2);
+      else if(G[0]==0 & G[1]==1 & G[2]==0) res = p*pow(q,3);
+      else if(G[0]==0 & G[1]==0 & G[2]==1) res = 0;
+      else if(G[0]==0 & G[1]==0 & G[2]==0) res = pow(q,4);
+  } else if(sum(r_id)==5){
+    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1/4*pow(p,2)*(1+p)*(5-3*p) + 1/2*p*q*(p+p*q+1);
+      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==1) res = 1/4*pow(p,2)*pow(q,2) + 1/2*p*pow(q,2);
+      else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1/4*p*pow(q,2)*(1+q);
+        else if(G[0]==0 & G[1]==1 & G[2]==1) res = 1/2*p*pow(q,2)*(1+p);
+          else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1/2*p*pow(q,3);
+          else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1/2*p*pow(q,3);
+          else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1/2*pow(q,3)*(1+q);
+  } else if(sum(r_id)==6){
+    if(G[0]==1 & G[1] ==1 & G[2]==1) res = 1/16*pow(p,2)*(1+3*p)*(7-3*p) + 1/4*p*q*(6*p + 3*p*q+2);
+      else if(G[0]==1 & G[1]==1 & G[2]==0) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
+        else if(G[0]==1 & G[1]==0 & G[2]==1) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
+          else if(G[0]==1 & G[1]==0 & G[2]==0) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
+            else if(G[0]==0 & G[1]==1 & G[2]==1) res = 5/16*pow(p,2)*pow(q,2) + 1/4*p*pow(q,2)*(1+q);
+              else if(G[0]==0 & G[1]==1 & G[2]==0) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
+                else if(G[0]==0 & G[1]==0 & G[2]==1) res = 1/16*pow(p,2)*pow(q,2) + 1/8*p*pow(q,2)*(1+3*q);
+                  else if(G[0]==0 & G[1]==0 & G[2]==0) res = 1/16*pow(q,2)*pow(1+3*q,2);
+  }
+  return(res);
+}
+
+
+
+double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
+           NumericVector lam01, double newrho, double rho, NumericVector exam_age, NumericVector cut_F,
+           NumericVector LAM03, NumericVector cut1, NumericVector LAM12, NumericVector cut2, NumericVector IG,
+           NumericVector SS, NumericVector rid, double pg0, double p, NumericVector w1,  NumericVector w2,
+           NumericVector u1,  NumericVector u2,  NumericVector ww1,  NumericVector ww2,  NumericVector uu1,  NumericVector uu2) {
+
+  double res;
+  res = (pClayton(SS, newrho)*ppc(exam_age[j1], LAM03[j1], cut1, 0.0, 0.0)*ppc(exam_age[j2], LAM03[j2], cut2, 0.0, 0.0)
+           + sum(w2*vh1(vh1(vpx, vppc(u2, lam01*exp(alpha*IG[2]), cut_F, 0.0, 0.0), rho), rep(SS[0], 20), newrho)
+                   *vdClayton(vpx, vppc(u2, lam01*exp(alpha*IG[2]), cut_F, 0.0, 0.0), rho, 0.0)*vdpc(u2, lam01*exp(alpha*IG[2]), cut_F, 0.0)*vppc(u2, LAM03[j2], cut2, 0.0, 0.0)
+                   /vppc(u2, LAM12[j2], cut2, 0.0, 0.0))*ppc(exam_age[j2],LAM12[j2],  cut2, 0.0, 0.0)*ppc(exam_age[j1], LAM03[j1], cut1, 0.0, 0.0)
+                   + sum(w1*vh1(vh1(vpx, vppc(u1, lam01*exp(alpha*IG[1]), cut_F, 0.0, 0.0), rho), rep(SS[1], 20), newrho)
+                   *vdClayton(vpx, vppc(u1, lam01*exp(alpha*IG[1]), cut_F, 0.0, 0.0), rho, 0.0)*vdpc(u1, lam01*exp(alpha*IG[1]), cut_F, 0.0)*vppc(u1, LAM03[j1], cut1, 0.0, 0.0)
+                   /vppc(u1, LAM12[j1], cut1, 0.0, 0.0))*ppc(exam_age[j1],  LAM12[j1], cut1, 0.0, 0.0)*ppc(exam_age[j2], LAM03[j2], cut2, 0.0, 0.0)
+                   +sum(ww1*ww2*vdClayton(vh1(vpx2, vppc(uu1, lam01*exp(alpha*IG[1]), cut_F, 0.0, 0.0), rho) , vh1(vpx2, vppc(uu2, lam01*exp(alpha*IG[2]), cut_F, 0.0, 0.0), rho),  newrho, 0.0)
+                   *vdClayton(vpx2, vppc(uu1, lam01*exp(alpha*IG[1]), cut_F, 0.0, 0.0), rho, 0.0)*vdClayton(vpx2, vppc(uu2*exp(alpha*IG[2]), lam01, cut_F, 0.0, 0.0), rho, 0.0)
+                   *vdpc(uu1, lam01*exp(alpha*IG[1]), cut_F, 0.0)*vdpc(uu2, lam01*exp(alpha*IG[2]), cut_F, 0.0)*vppc(uu1, LAM03[j1], cut1, 0.0, 0.0)*ppc(exam_age[j1], LAM12[j1], cut1, 0.0, 0.0)
+                   /vppc(uu1, LAM12[j1], cut1, 0.0, 0.0)*vppc(uu2, LAM03[j2],  cut2, 0.0, 0.0)
+                   *ppc(exam_age[j2], LAM12[j2], cut2, 0.0, 0.0)/vppc(uu2, LAM12[j2], cut2, 0.0, 0.0)))*pG(rid, IG, p)/pg0;
+
+  return(res);
+}
+

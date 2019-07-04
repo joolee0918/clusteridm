@@ -1,5 +1,5 @@
 
-
+#' @import survival
 #' @importFrom numDeriv grad
 #' @importFrom msm dpexp ppexp
 #' @importFrom utils combn
@@ -90,6 +90,9 @@ Y.fam <- lapply(1:length(Y.fam), function(i) as.matrix(Y.fam[[i]]))
 X.fam<- split(as.data.frame(data.fam), as.factor(data.fam[, "fid"]))
 outdata.F0 <- split(outdata.fam, as.factor(outdata.fam[, fam.id]))
 
+nf <- length(Y.fam)
+nr <- nrow(Y.R)
+
 if(is.null(init)){
   if(no.death == TRUE) par <- c(1, log(0.1))
   else par<- c(1, log(1.2), log(0.1))
@@ -102,7 +105,7 @@ if(is.null(init)){
 pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
                 outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
-parameter.pair <- exp(pairle$par)
+#parameter.pair <- exp(pairle$par)
 
 if(design == 1){
   if(no.death == TRUE) {
@@ -157,7 +160,7 @@ var <- solve(A)%*%B%*%t(solve(A))
 sd.pair <- sqrt(diag(var))
 
 result <- list()
-result$estimate <- parameter.pair
+result$estimate <- pairle$par
 result$var <- var
 return(result)
 }

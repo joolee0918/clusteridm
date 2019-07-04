@@ -27,5 +27,12 @@ double ppc(double q, NumericVector levels, NumericVector cuts, int lower, int lo
 double dpc(double x, NumericVector levels, NumericVector cuts, int logf);
 NumericVector vppc(NumericVector q, NumericVector levels, NumericVector cuts, int lower, int logf);
 NumericVector vdpc(NumericVector x, NumericVector levels, NumericVector cuts, int logf);
+double pG0(NumericVector r_id, NumericVector G, double p);
+double pG(NumericVector r_id, NumericVector G, double p);
+double ff1(int j1, int j2, NumericVector vpx, NumericVector vpx2, double alpha,
+           NumericVector lam01, double newrho, double rho, NumericVector exam_age, NumericVector cut_F,
+           NumericVector LAM03, NumericVector cut1, NumericVector LAM12, NumericVector cut2, NumericVector IG,
+           NumericVector SS, NumericVector rid, double pg0, double p, NumericVector w1,  NumericVector w2,
+           NumericVector u1,  NumericVector u2,  NumericVector ww1,  NumericVector ww2,  NumericVector uu1,  NumericVector uu2);
 #endif
 
