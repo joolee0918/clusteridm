@@ -105,7 +105,7 @@ double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, Nu
 
 
 //[[Rcpp::export()]]
-double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  NumericVector IG_R,  List LAM03R, List cutR, Function fgau){
+double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,   List LAM03R, List cutR, Function fgau){
 
   int i;
   double pg0R;
@@ -119,11 +119,11 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
   double auxtmp1 = 0;
 
   for(i=0; i<LAM03R.size(); i++) {
-    double C0 = X_R(i, 0);
+    double C0 = X_R(i, 1);
     double X = Y_R(i, 0);
     double Y = Y_R(i, 1);
     int del3 = Y_R(i, 2);
-    double IG = IG_R(i);
+    double IG = X_R(i, 0);
 
 
     if(IG==0){

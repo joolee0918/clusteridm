@@ -9,12 +9,12 @@
 #' @export
 clusterIDM <- function(fam.formula, R.formula, S.formula,
                        outdata.fam, outdata.proband, outdata.R, outdata.S = NULL,
-                       fam.id, fam.rel, recruit.age.fam,
+                       G = NULL, fam.id, fam.rel, recruit.age.fam,
                        first.visit.age.R, R.id, recruit.age.S =NULL,
                        birth, cut=0, lam03, Age = NULL, Cal = NULL, design, full = FALSE, no.death = FALSE, init = NULL){
 
-  new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
-  new.R.formula <- update.formula(R.formula,  paste("~.+", paste(first.visit.age.R, birth, sep="+")))
+  new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(G, fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
+  new.R.formula <- update.formula(R.formula,  paste("~.+", paste(G, first.visit.age.R, birth, sep="+")))
 
   outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
   outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
@@ -32,12 +32,19 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   Y.R <- as.matrix(model.extract(m.R, "response"))
 
   data.fam <- model.matrix(new.fam.formula, outdata.fam)[,-1]
-  colnames(data.fam) <- c("fid", "rel.id", "exam.age", "B")
+  if(is.null(G)) colnames(data.fam) <- c("fid", "rel.id", "exam.age", "B")
+  else  colnames(data.fam) <- c("G", "fid", "rel.id", "exam.age", "B")
 
   data.proband <- model.matrix(new.R.formula, outdata.proband)[,-1]
   data.R <- model.matrix(new.R.formula, outdata.R)[,-1]
-  colnames(data.proband) <- c("exam.age", "B")
-  colnames(data.R) <- c("exam.age", "B")
+  if(is.null(G)){
+    colnames(data.proband) <- c("exam.age", "B")
+    colnames(data.R) <- c("exam.age", "B")
+  } else{
+    colnames(data.proband) <- c("G","exam.age", "B")
+    colnames(data.R) <- c("G", "exam.age", "B")
+
+  }
 
   Y.S <- data.S <- NULL
   if(!is.null(S.formula)) {
@@ -103,7 +110,7 @@ if(is.null(init)){
 
 
 pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
-                outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
+                outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, G = G, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 #parameter.pair <- exp(pairle$par)
 

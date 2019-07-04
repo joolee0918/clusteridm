@@ -554,7 +554,7 @@ double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix 
     del2 = data_Y(_,1);
     del3 = Y_proband(i,2);
 
-    IG = data_X["I.G"];
+    IG = data_X["G"];
     rid = data_X["rel.id"];
     if(IG[0]==0){
       pg0 = pow((1-p),2);
