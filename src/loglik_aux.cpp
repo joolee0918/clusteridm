@@ -127,7 +127,6 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
     int del3 = Y_R(i, 2);
     double IG = X_R(i, 3);
 
-
     if(IG==0){
       pg0R =  pow((1-p),2);
     } else{
@@ -139,7 +138,7 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
     NumericVector LAM03_R = LAM03R[i];
     NumericVector LAM12_R = theta*LAM03_R;
     NumericVector cut_R = cutR[i];;
-    NumericMatrix gauss_quad = fgau(20, 0, C0);
+    NumericMatrix gauss_quad = fgau(40, 0, C0);
     NumericVector u = gauss_quad(_,0);
     NumericVector w = gauss_quad(_,1);
 
@@ -151,9 +150,10 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
                           + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
 
       } else{
+
         auxtmp1 += (log(dpc(X, lam01*exp(alpha*IG), cut_F, 0.0)*ppc(X, LAM03_R, cut_R,  0.0, 0.0)*dpc(Y, LAM12_R, cut_R, 0.0)/ppc(X, LAM12_R, cut_R,  0.0, 0.0))
                       + log(pg0R)  -  log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*pow((1-p),2)
-                      + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2))));
+                      + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_R, cut_R, 0.0, 0.0)*ppc(C0, LAM12_R, cut_R,  0.0, 0.0)/vppc(u, LAM12_R, cut_R, 0.0, 0.0))*(1-pow((1-p),2)) ));
 
       }
     }else{
@@ -273,14 +273,14 @@ double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix 
     if(del2 == 0){
       auxtmp2 += (log(ppc(C0, lam01, cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0)*pow((1-p),2)
                     +ppc(C0, lam01*exp(alpha), cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0)*(1-pow((1-p),2)))
-                    - log(ppc(C0, lam01, cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*pow((1-p),2)
-                    + ppc(C0, lam01*exp(alpha), cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*(1-pow((1-p),2))));
+                    - log((ppc(C0, lam01, cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0)))*pow((1-p),2)
+                    + (ppc(C0, lam01*exp(alpha), cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0)))*(1-pow((1-p),2))));
 
     }else{
       auxtmp2 += (log(sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S,  0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*pow((1-p),2)
-                    +sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S,  0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*pow((1-p),2))
-                    - log(ppc(C0, lam01, cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*pow((1-p),2)
-                    + ppc(C0, lam01*exp(alpha), cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*(1-pow((1-p),2))));
+                    +sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S,  0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0))*(1-pow((1-p),2)))
+                    - log((ppc(C0, lam01, cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01, cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0)))*pow((1-p),2)
+                    + (ppc(C0, lam01*exp(alpha), cut_F, 0.0, 0.0)*ppc(C0, LAM03_S, cut_S, 0.0, 0.0) + sum(w*vdpc(u, lam01*exp(alpha), cut_F, 0.0)*vppc(u, LAM03_S, cut_S, 0.0, 0.0)*ppc(C0, LAM12_S, cut_S, 0.0, 0.0)/vppc(u, LAM12_S, cut_S, 0.0, 0.0)))*(1-pow((1-p),2))));
 
     }
 
