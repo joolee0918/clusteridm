@@ -296,7 +296,7 @@ double loglikFD2_pch(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_pro
 
 //#pragma omp parallel for private(i, j, l, k, gauss_quad, u, u1, u2, w, w1, w2, sq, rep1, rep2, uu1, uu2, ww1, ww2, tmp1, tmp2, tmp3, tmp5, tmp7, tmp8) num_threads(4) reduction(+: rr)
   for(i=0; i<nf; i++){
-    tmp1 = tmp2 = tmp3 = tmp5 = tmp7 = tmp8 = 0;
+    tmp1 = tmp2 = tmp3 = tmp5 = tmp6 = tmp7 = tmp8 = 0;
 
     NumericMatrix data_Y = as<NumericMatrix>(Y_F[i]);
     DataFrame data_X = as<DataFrame>(X_F[i]);
