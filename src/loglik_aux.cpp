@@ -55,7 +55,7 @@ double NloglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, N
   double auxtmp1 = 0;
 
   for(i=0; i<Y_R.nrow(); i++) {
-    double C0 = X_R(i, 0);
+    double C0 = X_R(i, 1);
     double X = Y_R(i, 0);
 
     NumericMatrix gauss_quad = fgau(20, 0, C0);
@@ -82,7 +82,7 @@ double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, Nu
   double auxtmp1 = 0;
 
   for(i=0; i<LAM03R.size(); i++) {
-    double C0 = X_R(i, 0);
+    double C0 = X_R(i, 1);
     double X = Y_R(i, 0);
     double Y = Y_R(i, 1);
     int del3 = Y_R(i, 2);
@@ -123,7 +123,7 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
     double X = Y_R(i, 0);
     double Y = Y_R(i, 1);
     int del3 = Y_R(i, 2);
-    double IG = X_R(i, 0);
+    double IG = X_R(i, 3);
 
 
     if(IG==0){

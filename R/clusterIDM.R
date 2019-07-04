@@ -14,7 +14,7 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
                        birth, cut=0, lam03, Age = NULL, Cal = NULL, design, full = FALSE, no.death = FALSE, init = NULL){
 
   new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(G, fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
-  new.R.formula <- update.formula(R.formula,  paste("~.+", paste(G, first.visit.age.R, birth, sep="+")))
+  new.R.formula <- update.formula(R.formula,  paste("~.+", paste(R.id, first.visit.age.R, birth, sep="+")))
 
   outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
   outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
@@ -37,13 +37,14 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
 
   data.proband <- model.matrix(new.R.formula, outdata.proband)[,-1]
   data.R <- model.matrix(new.R.formula, outdata.R)[,-1]
-  if(is.null(G)){
-    colnames(data.proband) <- c("exam.age", "B")
-    colnames(data.R) <- c("exam.age", "B")
-  } else{
-    colnames(data.proband) <- c("G","exam.age", "B")
-    colnames(data.R) <- c("G", "exam.age", "B")
+  colnames(data.proband) <- c("id", "exam.age", "B")
+  colnames(data.R) <- c("id", "exam.age", "B")
+  if(!is.null(G)){
+    data.R <- merge(data.R, cbind(outdata.R[, c(R.id, G)]), by=R.id)
+    names(data.R)[4] <- "G"
 
+    data.proband <- merge(data.proband, cbind(outdata.proband[, c(R.id, G)]), by=R.id)
+    names(data.proband)[4] <- "G"
   }
 
   Y.S <- data.S <- NULL
@@ -52,7 +53,7 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
     m.S <- model.frame(new.S.formula, outdata.S)
     Y.S <- as.matrix(model.extract(m.S, "response"))
     data.S <- model.matrix(new.S.formula, outdata.S)[,-1]
-    colnames(data.R) <- c("exam.age", "B")
+    colnames(data.S) <- c("exam.age", "B")
   }
 
  if(is.null(Age)) Age = c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90)
@@ -77,11 +78,11 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   LAM03.S <- cut.S <- NULL
   if(!is.null(outdata.S)){
   ns <- nrow(outdata.S)
-  C.B0 <- lapply(1:ns, function(i) data.S[i, birth]+ Age)
+  C.B0 <- lapply(1:ns, function(i) data.S[i, "B"]+ Age)
   C <- lapply(1:ns, function(i) sort(c(Cal, C.B0[[i]])))
 
-  Cf.F <- lapply(1:ns, function(i) unique(C[[i]][data.S[i, birth] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, birth]]))
-  Af.F <- lapply(1:ns, function(i) Cf.F[[i]] - data.S[i, birth])
+  Cf.F <- lapply(1:ns, function(i) unique(C[[i]][data.S[i, "B"] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, "B"]]))
+  Af.F <- lapply(1:ns, function(i) Cf.F[[i]] - data.S[i, "B"])
 
   R.f <- lapply(1:ns, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
   A.f <- lapply(1:ns, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
