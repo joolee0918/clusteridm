@@ -16,9 +16,9 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   new.fam.formula <- update.formula(fam.formula,  paste("~.+", paste(G, fam.id, fam.rel, recruit.age.fam, birth, sep="+")))
   new.R.formula <- update.formula(R.formula,  paste("~.+", paste(R.id, first.visit.age.R, birth, sep="+")))
 
-  outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
-  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
-  outdata.proband[, birth] <- lubridate::year(outdata.proband[, birth]) + lubridate::yday(outdata.proband[,birth])/365
+#  outdata.fam[, birth] <- lubridate::year(outdata.fam[, birth]) + lubridate::yday(outdata.fam[,birth])/365
+#  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
+#  outdata.proband[, birth] <- lubridate::year(outdata.proband[, birth]) + lubridate::yday(outdata.proband[,birth])/365
 
   #outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
   #outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
