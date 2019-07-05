@@ -160,7 +160,8 @@ if(no.death == FALSE) {
 
   }else{
   score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch_gene, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
-} else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), fgau = gauleg.f))
+}
+  }else score_r <- sapply(1:nr, function(i) numDeriv::grad(NloglikR_pch, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), fgau = gauleg.f))
 
 
 if(!is.null(outdata.S)) {
