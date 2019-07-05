@@ -2,8 +2,12 @@
 
 export(clusterIDM)
 export(generate_con)
+export(generate_con_gene)
 export(generate_cur)
+export(generate_cur_gene)
 export(generate_mar)
+export(generate_mar_gene)
+import(survival)
 importFrom(copula,cCopula)
 importFrom(copula,claytonCopula)
 importFrom(copula,iTau)
