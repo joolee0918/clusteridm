@@ -20,8 +20,8 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
 #  outdata.R[, birth] <- lubridate::year(outdata.R[, birth]) + lubridate::yday(outdata.R[,birth])/365
 #  outdata.proband[, birth] <- lubridate::year(outdata.proband[, birth]) + lubridate::yday(outdata.proband[,birth])/365
 
-  #outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
-  #outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
+  outdata.proband <- outdata.R[outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
+  outdata.R <- outdata.R[!outdata.R[,R.id] %in% unique(outdata.fam[, fam.id]), ]
 
   m.fam <- model.frame(new.fam.formula, data = outdata.fam)
   m.proband <- model.frame(new.R.formula, data = outdata.proband)
