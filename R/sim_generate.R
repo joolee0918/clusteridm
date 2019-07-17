@@ -2,7 +2,7 @@
 # Generate latent illness-death model
 #
 # Biased sampling i) tracing proband ii) alive non-proband only data observed; m=2, 4, 6 with 1/3 prob
-# Last Update : April 09, 2018
+# Last Update : July 17, 2019
 #==================================================
 
 #' @importFrom timereg pc.hazard
