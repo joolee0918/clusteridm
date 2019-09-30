@@ -13,7 +13,7 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
   theta <- ifelse(lam03$Age.f <13 & lam03$Age.f >=9 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=13 , exp(par[4]), theta)
 
-  lam12 <- lam13
+  lam12 <- lam03
   lam12$rate <- lam12$rate*theta
 
   nr <- length(cut.R)
