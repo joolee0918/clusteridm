@@ -14,7 +14,7 @@
 #include "commonf.h"
 
 //[[Rcpp::export()]]
-double loglikR_pch(NumericVector par, NumericVector theta, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List LAM12R, List cutR, Function fgau){
+double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List LAM12R, List cutR, Function fgau){
 
   int i;
   //double theta = exp(par[1]);
@@ -47,7 +47,7 @@ double loglikR_pch(NumericVector par, NumericVector theta, NumericVector cut_F, 
 
 
 //[[Rcpp::export()]]
-double loglikR_pch_gene(NumericVector par, NumericVector theta, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,   List LAM03R, List LAM12R, List cutR, Function fgau){
+double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,   List LAM03R, List LAM12R, List cutR, Function fgau){
 
   int i;
   double pg0R;
@@ -119,7 +119,7 @@ double loglikR_pch_gene(NumericVector par, NumericVector theta, NumericVector cu
 
 
 //[[Rcpp::export()]]
-double loglikS_pch( NumericVector par, NumericVector theta, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
+double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
 
   int i;
   //double theta = exp(par[1]);
@@ -153,7 +153,7 @@ double loglikS_pch( NumericVector par, NumericVector theta, NumericVector cut_F,
 
 
 //[[Rcpp::export()]]
-double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
+double loglikS_pch_gene(NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
 
   int i;
   //double theta = exp(par[1]);
