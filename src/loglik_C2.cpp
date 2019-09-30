@@ -19,14 +19,14 @@ using namespace Rcpp;
 
 
 //[[Rcpp::export()]]
-double loglikFD2_pch(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_proband, NumericMatrix X_proband,
+double loglikFD2_pch(NumericVector par, NumericVector theta, List Y_F, List X_F,  NumericMatrix Y_proband, NumericMatrix X_proband,
                  NumericVector Age, NumericVector Cal,   NumericVector cut_F, DataFrame lam03,
                  Function fgau, Function combn){
 
-  double theta = exp(par[1]);
+ // double theta = exp(par[1]);
   double rho = par[0];
   double newrho = rho/(1+rho);
-  NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
+  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
 
   int i, j, j1, j2, k, l, nr, pair_nr;
   int nf = Y_F.size();
@@ -248,16 +248,16 @@ double loglikFD2_pch(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_pro
 
 
 //[[Rcpp::export()]]
-double loglikFD2_pch_gene(NumericVector par, List Y_F, List X_F,  NumericMatrix Y_proband, NumericMatrix X_proband,
+double loglikFD2_pch_gene(NumericVector par, NumericVector theta, List Y_F, List X_F,  NumericMatrix Y_proband, NumericMatrix X_proband,
                      NumericVector Age, NumericVector Cal,   NumericVector cut_F, DataFrame lam03,
                      Function fgau, Function combn){
 
-  double theta = exp(par[1]);
+ // double theta = exp(par[1]);
   double rho = par[0];
   double newrho = rho/(1+rho);
-  double alpha = par[2];
-  double p = exp(par[3]);
-  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
+  double alpha = par[4];
+  double p = exp(par[5]);
+  NumericVector lam01 = exp(par[seq(6, par.size()-1)]);
 
   Rcout<<alpha<<"\n";
 

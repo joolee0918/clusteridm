@@ -14,11 +14,11 @@
 #include "commonf.h"
 
 //[[Rcpp::export()]]
-double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List cutR, Function fgau){
+double loglikR_pch(NumericVector par, NumericVector theta, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,  List LAM03R, List LAM12R, List cutR, Function fgau){
 
   int i;
-  double theta = exp(par[1]);
-  NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
+  //double theta = exp(par[1]);
+  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
 
 
   double auxtmp1 = 0;
@@ -30,7 +30,7 @@ double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, Nu
     int del3 = Y_R(i, 2);
 
     NumericVector LAM03_R = LAM03R[i];
-    NumericVector LAM12_R = theta*LAM03_R;
+    NumericVector LAM12_R = LAM12R[i];
     NumericVector cut_R = cutR[i];;
     NumericMatrix gauss_quad = fgau(20, 0, C0);
     NumericVector u = gauss_quad(_,0);
@@ -47,14 +47,14 @@ double loglikR_pch(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, Nu
 
 
 //[[Rcpp::export()]]
-double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,   List LAM03R, List cutR, Function fgau){
+double loglikR_pch_gene(NumericVector par, NumericVector theta, NumericVector cut_F, NumericMatrix Y_R, NumericMatrix X_R,   List LAM03R, List LAM12R, List cutR, Function fgau){
 
   int i;
   double pg0R;
-  double theta = exp(par[1]);
-  double alpha = par[2];
-  double p = exp(par[3]);
-  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
+ // double theta = exp(par[1]);
+  double alpha = par[4];
+  double p = exp(par[5]);
+  NumericVector lam01 = exp(par[seq(6, par.size()-1)]);
 
 
 
@@ -76,7 +76,7 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
 
 
     NumericVector LAM03_R = LAM03R[i];
-    NumericVector LAM12_R = theta*LAM03_R;
+    NumericVector LAM12_R = LAM12R[i];
     NumericVector cut_R = cutR[i];;
     NumericMatrix gauss_quad = fgau(40, 0, C0);
     NumericVector u = gauss_quad(_,0);
@@ -119,11 +119,11 @@ double loglikR_pch_gene(NumericVector par, NumericVector cut_F, NumericMatrix Y_
 
 
 //[[Rcpp::export()]]
-double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List cutS, Function fgau){
+double loglikS_pch( NumericVector par, NumericVector theta, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
 
   int i;
-  double theta = exp(par[1]);
-  NumericVector lam01 = exp(par[seq(2, par.size()-1)]);
+  //double theta = exp(par[1]);
+  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
 
   double auxtmp2 = 0;
 
@@ -133,7 +133,7 @@ double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, 
     int del2 = Y_S(i,1);
 
     NumericVector LAM03_S = LAM03S[i];
-    NumericVector LAM12_S = theta*LAM03_S;
+    NumericVector LAM12_S = LAM12S[i];
     NumericVector cut_S = cutS[i];
 
     NumericMatrix gauss_quad = fgau(20, 0, C0);
@@ -153,13 +153,13 @@ double loglikS_pch( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, 
 
 
 //[[Rcpp::export()]]
-double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List cutS, Function fgau){
+double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix Y_S, List LAM03S, List LAM12S, List cutS, Function fgau){
 
   int i;
-  double theta = exp(par[1]);
-  double alpha = par[2];
-  double p = exp(par[3]);
-  NumericVector lam01 = exp(par[seq(4, par.size()-1)]);
+  //double theta = exp(par[1]);
+  double alpha = par[4];
+  double p = exp(par[5]);
+  NumericVector lam01 = exp(par[seq(6, par.size()-1)]);
 
   double auxtmp2 = 0;
 
@@ -169,7 +169,7 @@ double loglikS_pch_gene( NumericVector par, NumericVector cut_F,  NumericMatrix 
     int del2 = Y_S(i,1);
 
     NumericVector LAM03_S = LAM03S[i];
-    NumericVector LAM12_S = theta*LAM03_S;
+    NumericVector LAM12_S = LAM12S[i];
     NumericVector cut_S = cutS[i];
 
     NumericMatrix gauss_quad = fgau(20, 0, C0);

@@ -61,6 +61,15 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   lam03$Year.f <- rep(seq(1, length(Cal)), each=length(Age))
   lam03$Age.f <- rep(seq(1, length(Age)), length(Cal))
 
+  if(is.null(init)){
+    if(no.death == TRUE) par <- c(rho, log(lam01))
+    else par<- c(rho, log(theta), log(lam01))
+
+  }else{
+    par <- init
+  }
+
+
   nr <- nrow(outdata.R)
   C.B0 <- lapply(1:nr, function(i) data.R[i, "B"]+ Age)
   C <- lapply(1:nr, function(i) sort(c(Cal, C.B0[[i]])))
@@ -68,13 +77,13 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   Cf.F <- lapply(1:nr, function(i) unique(C[[i]][data.R[i, "B"] <= C[[i]] & C[[i]] <= Y.R[i,2] + data.R[i, "B"] ]))
   Af.F <- lapply(1:nr, function(i) Cf.F[[i]] - data.R[i, "B"])
 
-  R.f <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
-  A.f <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+  R.fR <- lapply(1:nr, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
+  A.fR <- lapply(1:nr, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
 
-  LAM03.R <-  lapply(1:nr, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
+
   cut.R <- lapply(1:nr, function(j) Af.F[[j]][-1])
 
-  LAM03.S <- cut.S <- NULL
+  R.fS <- A.fS <- cut.S <- NULL
   if(!is.null(outdata.S)){
   ns <- nrow(outdata.S)
   C.B0 <- lapply(1:ns, function(i) data.S[i, "B"]+ Age)
@@ -83,10 +92,9 @@ clusterIDM <- function(fam.formula, R.formula, S.formula,
   Cf.F <- lapply(1:ns, function(i) unique(C[[i]][data.S[i, "B"] <= C[[i]] & C[[i]] <= Y.S[i, 1] + data.S[i, "B"]]))
   Af.F <- lapply(1:ns, function(i) Cf.F[[i]] - data.S[i, "B"])
 
-  R.f <- lapply(1:ns, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
-  A.f <- lapply(1:ns, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
+  R.fS <- lapply(1:ns, function(i) sapply(1:length(Cf.F[[i]]), function(k) findInterval(Cf.F[[i]][k], Cal)))
+  A.fS <- lapply(1:ns, function(i) sapply(1:length(Af.F[[i]]), function(k) findInterval(Af.F[[i]][k], Age)))
 
-  LAM03.S <-  lapply(1:ns, function(j) sapply(1:length(R.f[[j]]), function(i) lam03[lam03$Year.f==R.f[[j]][i] & lam03$Age.f==A.f[[j]][i], ]$rate))
   cut.S <- lapply(1:ns, function(j) Af.F[[j]][-1])
 }
 
@@ -100,17 +108,10 @@ outdata.F0 <- split(outdata.fam, as.factor(outdata.fam[, fam.id]))
 nf <- length(Y.fam)
 nr <- nrow(Y.R)
 
-if(is.null(init)){
-  if(no.death == TRUE) par <- c(rho, log(lam01))
-  else par<- c(rho, log(theta), log(lam01))
-
-}else{
-  par <- init
-}
 
 
 pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.proband, X.proband = data.proband, Y.R = Y.R, X.R = data.R, Y.S = Y.S,
-                outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, LAM03.R = LAM03.R, cut.R = cut.R, LAM03.S = LAM03.S, cut.S = cut.S, G = G, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
+                outdata.F0 = outdata.F0, outdata.proband = outdata.proband[, first.visit.age.R], cut = cut, R.fR = R.fR, A.fR = A.fR, cut.R = cut.R, R.fS = R.fS, A.fS = A.fS, cut.S = cut.S, G = G, Age = Age, Cal = Cal, design = design, full = full, no.death = no.death, method = "BFGS", hessian = TRUE)
 
 #parameter.pair <- exp(pairle$par)
 
@@ -123,10 +124,10 @@ pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.pro
 
 #  }else{
        if(is.null(G)){
-      score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = t(as.matrix(Y.proband[i,])), X_proband = t(as.matrix(data.proband[i,])),
+      score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch_R,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = t(as.matrix(Y.proband[i,])), X_proband = t(as.matrix(data.proband[i,])),
                                                                          Age = Age, Cal = Cal, cut_F = cut, lam03 = lam03, fgau = gauleg.f, combn = utils::combn))
     }else{
-      score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch_gene,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = t(as.matrix(Y.proband[i,])), X_proband = t(as.matrix(data.proband[i,])),
+      score_i <- sapply(1:nf, function(i) numDeriv::grad(func=loglikFD2_pch_gene_R,  x=pairle$par, Y_F = Y.fam[i], X_F = X.fam[i], Y_proband = t(as.matrix(Y.proband[i,])), X_proband = t(as.matrix(data.proband[i,])),
                                                          Age = Age, Cal = Cal, cut_F = cut, lam03 = lam03, fgau = gauleg.f, combn = utils::combn))
 
     }
@@ -134,19 +135,19 @@ pairle <- optim(par, pair.logL, Y.fam = Y.fam, X.fam = X.fam,  Y.proband = Y.pro
  # }
 score_r <- matrix(0, nrow=nr, ncol=2)
  if(is.null(G)){
-    score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
+    score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch_R, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), R.fR = R.fR[[i]], A.fR = A.fR[[i]], cutR = cut.R[i], fgau = gauleg.f))
 
   }else{
-  score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch_gene, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), LAM03R = LAM03.R[i], cutR = cut.R[i], fgau = gauleg.f))
+  score_r <- sapply(1:nr, function(i) numDeriv::grad(loglikR_pch_gene_R, x=pairle$par,  cut_F = cut, Y_R = t(as.matrix(Y.R[i,])), X_R = t(as.matrix(data.R[i,])), R.fR = R.fR[[i]], A.fR = A.fR[[i]], cutR = cut.R[i], fgau = gauleg.f))
 }
 
 
 if(!is.null(outdata.S)) {
     if(is.null(G)){
-      score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch, x=pairle$par,  cut_F = cut, Y_S = t(as.matrix(Y.S[i,])) ,LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
+      score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch_R, x=pairle$par,  cut_F = cut, Y_S = t(as.matrix(Y.S[i,])), R.fS = R.fS[[i]], A.fS = A.fS[[i]],  cutS = cut.S[i], fgau = gauleg.f))
 
     }else{
-    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch_gene, x=pairle$par,  cut_F = cut, Y_S = t(as.matrix(Y.S[i,])) ,LAM03S = LAM03.S[i], cutS = cut.S[i], fgau = gauleg.f))
+    score_s <- sapply(1:ns, function(i) numDeriv::grad(loglikS_pch_gene_R, x=pairle$par,  cut_F = cut, Y_S = t(as.matrix(Y.S[i,])) ,R.fS = R.fS[[i]], A.fS = A.fS[[i]], cutS = cut.S[i], fgau = gauleg.f))
     }
 }
 
