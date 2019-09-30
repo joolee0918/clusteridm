@@ -37,27 +37,27 @@ pG <- function(r_id, G, p) {
     .Call(`_clusteridm_pG`, r_id, G, p)
 }
 
-loglikFD2_pch <- function(par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn) {
-    .Call(`_clusteridm_loglikFD2_pch`, par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn)
+loglikFD2_pch <- function(par, theta, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn) {
+    .Call(`_clusteridm_loglikFD2_pch`, par, theta, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn)
 }
 
-loglikFD2_pch_gene <- function(par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn) {
-    .Call(`_clusteridm_loglikFD2_pch_gene`, par, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn)
+loglikFD2_pch_gene <- function(par, theta, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn) {
+    .Call(`_clusteridm_loglikFD2_pch_gene`, par, theta, Y_F, X_F, Y_proband, X_proband, Age, Cal, cut_F, lam03, fgau, combn)
 }
 
-loglikR_pch <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
-    .Call(`_clusteridm_loglikR_pch`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
+loglikR_pch <- function(par, theta, cut_F, Y_R, X_R, LAM03R, LAM12R, cutR, fgau) {
+    .Call(`_clusteridm_loglikR_pch`, par, theta, cut_F, Y_R, X_R, LAM03R, LAM12R, cutR, fgau)
 }
 
-loglikR_pch_gene <- function(par, cut_F, Y_R, X_R, LAM03R, cutR, fgau) {
-    .Call(`_clusteridm_loglikR_pch_gene`, par, cut_F, Y_R, X_R, LAM03R, cutR, fgau)
+loglikR_pch_gene <- function(par, theta, cut_F, Y_R, X_R, LAM03R, LAM12R, cutR, fgau) {
+    .Call(`_clusteridm_loglikR_pch_gene`, par, theta, cut_F, Y_R, X_R, LAM03R, LAM12R, cutR, fgau)
 }
 
-loglikS_pch <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
-    .Call(`_clusteridm_loglikS_pch`, par, cut_F, Y_S, LAM03S, cutS, fgau)
+loglikS_pch <- function(par, theta, cut_F, Y_S, LAM03S, LAM12S, cutS, fgau) {
+    .Call(`_clusteridm_loglikS_pch`, par, theta, cut_F, Y_S, LAM03S, LAM12S, cutS, fgau)
 }
 
-loglikS_pch_gene <- function(par, cut_F, Y_S, LAM03S, cutS, fgau) {
-    .Call(`_clusteridm_loglikS_pch_gene`, par, cut_F, Y_S, LAM03S, cutS, fgau)
+loglikS_pch_gene <- function(par, cut_F, Y_S, LAM03S, LAM12S, cutS, fgau) {
+    .Call(`_clusteridm_loglikS_pch_gene`, par, cut_F, Y_S, LAM03S, LAM12S, cutS, fgau)
 }
 
