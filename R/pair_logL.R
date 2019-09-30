@@ -57,7 +57,7 @@ loglikR_pch_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
   LAM12.R[[1]] <- sapply(1:length(R.fR), function(i) lam12[lam03$Year.f==R.fR[i] & lam03$Age.f==A.fR[i]])
 
 
-  res <- loglikR_pch(par,  theta, cut_F, Y_R, X_R,  LAM03.R[1], LAM12.R[1], cutR, fgau)
+  res <- loglikR_pch(par,  cut_F, Y_R, X_R,  LAM03.R[1], LAM12.R[1], cutR, fgau)
 
   return(res)
 }
@@ -74,7 +74,7 @@ loglikR_pch_gene_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
   LAM12.R[[1]] <- sapply(1:length(R.fR), function(i) lam12[lam03$Year.f==R.fR[i] & lam03$Age.f==A.fR[i]])
 
 
-  res <- loglikR_pch_gene(par,  theta, cut_F, Y_R, X_R,  LAM03.R[1], LAM12.R[1], cutR, fgau)
+  res <- loglikR_pch_gene(par, cut_F, Y_R, X_R,  LAM03.R[1], LAM12.R[1], cutR, fgau)
 
   return(res)
 }
@@ -92,7 +92,7 @@ loglikS_pch_R <- function(par, cut_F, Y_S, X_S,  R.fS, A.fS, cutS, fgau){
   LAM12.S[[1]] <- sapply(1:length(R.fS), function(i) lam12[lam03$Year.f==R.fS[i] & lam03$Age.f==A.fS[i]])
 
 
-  res <- loglikS_pch( par, theta, cut_F,  Y_S, LAM03.S[1], LAM12.S[1], cutS, fgau)
+  res <- loglikS_pch( par, cut_F,  Y_S, LAM03.S[1], LAM12.S[1], cutS, fgau)
 
 
   return(res)
@@ -110,7 +110,7 @@ loglikS_pch_gene_R <- function(par, cut_F, Y_S, X_S,  R.fS, A.fS, cutS, fgau){
   LAM12.S[[1]] <- sapply(1:length(R.fS), function(i) lam12[lam03$Year.f==R.fS[i] & lam03$Age.f==A.fS[i]])
 
 
-  res <- loglikS_pch_gene( par, theta, cut_F,  Y_S, LAM03.S[1], LAM12.S[1], cutS, fgau)
+  res <- loglikS_pch_gene( par,  cut_F,  Y_S, LAM03.S[1], LAM12.S[1], cutS, fgau)
 
 
   return(res)
