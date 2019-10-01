@@ -9,7 +9,7 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
   #if(design == 1){
    # res <- loglikFD1_pch(par, cut, outdata.F0, outdata.proband, Age, Cal, lam03, full, gauleg.f, utils::combn)
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
@@ -48,7 +48,7 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
 loglikFD2_pch_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
                  Age, Cal,   cut_F, lam03, fgau, combn){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
@@ -59,7 +59,7 @@ loglikFD2_pch_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
 loglikFD2_pch_gene_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
                  Age, Cal,   cut_F, lam03, fgau, combn){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
@@ -72,7 +72,7 @@ loglikFD2_pch_gene_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
 
 loglikR_pch_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
@@ -89,7 +89,7 @@ loglikR_pch_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
 
 loglikR_pch_gene_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
@@ -106,7 +106,7 @@ loglikR_pch_gene_R <- function(par, cut_F, Y_R, X_R,  R.fR, A.fR, cutR, fgau){
 
 loglikS_pch_R <- function(par, cut_F, Y_S, X_S,  R.fS, A.fS, cutS, fgau){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
