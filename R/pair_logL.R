@@ -125,7 +125,7 @@ loglikS_pch_R <- function(par, cut_F, Y_S, X_S,  R.fS, A.fS, cutS, fgau){
 
 loglikS_pch_gene_R <- function(par, cut_F, Y_S, X_S,  R.fS, A.fS, cutS, fgau){
 
-  theta <- ifelse(lam03$Age.f < 14 exp(par[2]), 0)
+  theta <- ifelse(lam03$Age.f < 14, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <16 & lam03$Age.f >=14 , exp(par[3]), theta)
   theta <- ifelse( lam03$Age.f >=16 , exp(par[4]), theta)
 
