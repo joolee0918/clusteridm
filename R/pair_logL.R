@@ -46,26 +46,26 @@ pair.logL <-	function( par, Y.fam, X.fam,  Y.proband, X.proband, Y.R, X.R, Y.S,
 
 
 loglikFD2_pch_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
-                 Age, Cal,   cut_F, lam03, fgau, combn, copula){
+                 Age, Cal,   cut_F, lam03, fgau, combn){
 
   theta <- ifelse(lam03$Age.f < 9, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <13 & lam03$Age.f >=9 , exp(par[3]), theta)
   theta <- ifelse(lam03$Age.f >=13 , exp(par[4]), theta)
 
 
-  res <- loglikFD2_pch(par, theta, Y_F, X_F, Y_proband, X_proband),  Age, Cal, cut_F, lam03, fgau, combn)
+  res <- loglikFD2_pch(par, theta, Y_F, X_F, Y_proband, X_proband,  Age, Cal, cut_F, lam03, fgau, combn)
   return(res)
 }
                                                 
 loglikFD2_pch_gene_R <- function(par, Y_F, X_F,  Y_proband, X_proband,
-                 Age, Cal,   cut_F, lam03, fgau, combn, copula){
+                 Age, Cal,   cut_F, lam03, fgau, combn){
 
   theta <- ifelse(lam03$Age.f < 9, exp(par[2]), 0)
   theta <- ifelse(lam03$Age.f <13 & lam03$Age.f >=9 , exp(par[3]), theta)
   theta <- ifelse(lam03$Age.f >=13 , exp(par[4]), theta)
 
   
-  res <- loglikFD2_pch_gene(par, theta, Y_F, X_F, Y_proband, X_proband),  Age, Cal, cut_F, lam03, fgau, combn)
+  res <- loglikFD2_pch_gene(par, theta, Y_F, X_F, Y_proband, X_proband,  Age, Cal, cut_F, lam03, fgau, combn)
   return(res)
 }
 
